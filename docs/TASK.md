@@ -302,8 +302,8 @@ flowchart LR
 ## ⚛️ Modern Next.js Frontend Architecture & Tasks (App Router)
 
 ### `TASK-FE-01`: Next.js 14+ App Router & Design System Setup
-- [ ] **Objective**: Initialize Next.js app with TypeScript, Tailwind CSS, Lucide React, Shadcn/Radix UI, and Framer Motion.
-- [ ] **Libraries & Stack**:
+- [x] **Objective**: Initialize Next.js app with TypeScript, Tailwind CSS, Lucide React, and Framer Motion.
+- [x] **Libraries & Stack**:
   - `next`: 14+ App Router (React Server & Client Components)
   - `tailwindcss`: Refined dark-luxe slate palette & micro-grid backdrop tokens
   - `lucide-react`: Sharp, minimalist modern vector icons
@@ -314,23 +314,24 @@ flowchart LR
   - `colord`: WCAG 2.1 relative luminance & contrast calculations
 
 ### `TASK-FE-02`: Studio Customization Engine Components
-- [ ] **Objective**: Implement modern interactive React components for QR styling:
+- [x] **Objective**: Implement modern interactive React components for QR styling:
   - `PatternSelector.tsx`: Granular module geometry (Rounded, Circle, Gem, Liquid, Gapped, Square)
   - `EyeSelector.tsx`: Corner eye outer frame & inner ball shapes with custom color tinting
   - `ColorEngine.tsx`: Solid, Linear, and Radial gradients with transparent alpha background support
   - `LogoUploader.tsx`: Center logo upload with automatic padding clearance & brand icon presets
   - `CtaFrameCustom.tsx`: Top & Bottom CTA banner frames with customizable labels & colors
-  - `SecurityOptions.tsx`: PIN password gate, max scan limit, and hard expiry datetime picker
+  - `SecuritySection.tsx`: PIN password gate, max scan limit, and hard expiry datetime picker
   - `BrandKitBar.tsx`: 1-click theme application & corporate brand kit save modal
 
 ### `TASK-FE-03`: Real-Time Holographic Preview & Scannability Guard
-- [ ] **Objective**: Implement reactive live preview card and WCAG scannability guard widget:
+- [x] **Objective**: Implement reactive live preview card and WCAG scannability guard widget:
   - `LivePreviewCard.tsx`: Sticky responsive hologram preview with debounced backend rendering
   - `ScannabilityGuard.tsx`: Real-time WCAG contrast meter, 0–100% score badge & 1-click Auto-Fix button
   - `ExportBar.tsx`: PNG (800/1200/2400px), SVG vector, and 300 DPI print PDF export buttons
 
 ### `TASK-FE-04`: Workspace Manager & Smart Rules Modals
-- [ ] **Objective**: Implement dashboard management and smart routing dialogs:
+- [x] **Objective**: Implement dashboard management and smart routing dialogs:
   - `QrGrid.tsx` & `QrCard.tsx`: Filterable QR card listing with status pills (PIN, Exp, Limits, Rules)
-  - `RulesModal.tsx`: Tabbed modal for OS-based smart routing, time dayparting schedules & access security
-  - `AnalyticsModal.tsx`: Recharts device breakdown charts & recent scan logs table
+  - `SmartRulesModal.tsx`: Tabbed modal for OS-based smart routing, time dayparting schedules & access security
+  - `AnalyticsModal.tsx`: Device/OS breakdown charts, 24-hour heatmap & recent scan logs table
+  - `BulkGeneratorModal.tsx`: Bulk CSV drag-and-drop batch generator with ZIP download

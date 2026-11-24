@@ -85,13 +85,52 @@ def get_base_url(request: Request) -> str:
 # --- QR API ENDPOINTS ---
 
 @app.post("/api/qr/preview")
-async def preview_qr(payload: QRCodeCreateRequest):
-    """Generate instant live preview image without saving to DB."""
+async def preview_qr(
+    payload: QRCodeCreateRequest,
+    format: str = "png",
+    size: Optional[int] = None
+):
+    """Generate instant live preview image (PNG, SVG, or 300 DPI PDF) without saving to DB."""
     try:
         content = payload.target_url
         if not content:
             content = "https://smartqr.io"
-            
+
+        fmt = format.lower()
+        if fmt == "svg":
+            svg_content = generate_qr_svg(
+                data=content,
+                fg_color=payload.fg_color,
+                bg_color=payload.bg_color,
+                error_correction="H" if (payload.logo_type != "none" or payload.logo_data) else payload.error_correction,
+                margin=payload.margin,
+                logo_type=payload.logo_type or "none"
+            )
+            return Response(content=svg_content, media_type="image/svg+xml")
+        elif fmt == "pdf":
+            pdf_bytes = generate_qr_pdf(
+                data=content,
+                title=payload.title or "SmartQR",
+                fg_color=payload.fg_color,
+                bg_color=payload.bg_color,
+                gradient_type=payload.gradient_type,
+                fg_color_2=payload.fg_color_2,
+                dot_style=payload.dot_style,
+                eye_frame=payload.eye_frame,
+                eye_ball=payload.eye_ball,
+                eye_color=payload.eye_color,
+                error_correction=payload.error_correction,
+                margin=payload.margin,
+                size=size or 2400,
+                logo_type=payload.logo_type,
+                logo_data=payload.logo_data,
+                frame_style=payload.frame_style,
+                frame_text=payload.frame_text or "SCAN ME",
+                frame_color=payload.frame_color or "#0f172a"
+            )
+            return Response(content=pdf_bytes, media_type="application/pdf")
+
+        render_size = min(size, 2400) if size else min(payload.size, 600)
         img_bytes = generate_qr_image(
             data=content,
             fg_color=payload.fg_color,
@@ -104,7 +143,7 @@ async def preview_qr(payload: QRCodeCreateRequest):
             eye_color=payload.eye_color,
             error_correction=payload.error_correction,
             margin=payload.margin,
-            size=min(payload.size, 600),
+            size=render_size,
             logo_type=payload.logo_type,
             logo_data=payload.logo_data,
             frame_style=payload.frame_style,

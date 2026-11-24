@@ -35,7 +35,7 @@ export const api = {
       query.set("folder_id", params.folder_id.toString());
     }
 
-    const res = await fetch(`${BASE_URL}/api/qrs?${query.toString()}`);
+    const res = await fetch(`${BASE_URL}/api/qr?${query.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch QR codes");
     return res.json();
   },

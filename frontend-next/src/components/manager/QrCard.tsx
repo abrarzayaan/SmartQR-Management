@@ -52,7 +52,7 @@ export function QrCard({
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = `/api/qr/${qr.id}/png`;
+    link.href = `/api/qr/${qr.id}/download/png?size=1200`;
     link.download = `smartqr-${qr.short_code}.png`;
     document.body.appendChild(link);
     link.click();
@@ -70,7 +70,7 @@ export function QrCard({
           {/* Thumbnail */}
           <div className="h-16 w-16 rounded-xl bg-slate-950 border border-slate-800/80 p-1.5 flex items-center justify-center flex-shrink-0 group-hover:border-blue-500/40 transition-all">
             <img
-              src={`/api/qr/${qr.id}/png`}
+              src={`/api/qr/${qr.id}/image`}
               alt={qr.title}
               className="max-h-full max-w-full object-contain rounded"
               loading="lazy"

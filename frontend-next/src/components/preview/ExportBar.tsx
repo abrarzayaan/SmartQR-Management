@@ -52,19 +52,54 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
     },
   });
 
-  // Direct PNG Download
-  const handleDownloadPng = (size: number = 800) => {
-    if (!previewBlobUrl) {
-      toast.error("Preview is still rendering");
-      return;
+  // Direct PNG Download (renders requested resolution from backend)
+  const handleDownloadPng = async (size: number = 1200) => {
+    try {
+      const payload = getPayload();
+      const res = await fetch(`/api/qr/preview?format=png&size=${size}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `smartqr-${Date.now()}-${size}px.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success(`Downloaded PNG (${size}x${size}px)`);
+    } catch {
+      toast.error("Failed to download PNG");
     }
-    const link = document.createElement("a");
-    link.href = previewBlobUrl;
-    link.download = `smartqr-${Date.now()}-${size}px.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast.success(`Downloaded PNG (${size}x${size}px)`);
+  };
+
+  // Direct 300 DPI Print PDF Download from backend
+  const handleDownloadPdf = async () => {
+    try {
+      const payload = getPayload();
+      const res = await fetch("/api/qr/preview?format=pdf&size=2400", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `smartqr-print-300dpi-${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success("Downloaded 300 DPI Print PDF");
+    } catch {
+      toast.error("Failed to download PDF");
+    }
   };
 
   // Direct SVG Download from backend
@@ -186,11 +221,11 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
 
         <button
           type="button"
-          onClick={() => handleDownloadPng(2400)}
+          onClick={handleDownloadPdf}
           className="hover:text-blue-400 flex items-center gap-1 transition-all"
         >
           <Printer className="h-3 w-3" />
-          <span>300 DPI Print (2400px)</span>
+          <span>300 DPI Print PDF</span>
         </button>
       </div>
     </div>
