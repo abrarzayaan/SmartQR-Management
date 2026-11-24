@@ -5,6 +5,8 @@ import { Folder, Plus, Layers } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { FolderRecord } from "@/lib/types";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 interface FolderCampaignBarProps {
   selectedFolderId: number | null | undefined;
@@ -25,70 +27,82 @@ export function FolderCampaignBar({
   });
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
-      {/* All Folders */}
+    <div className="flex items-center gap-2 overflow-x-auto pb-1">
       <button
+        type="button"
         onClick={() => onSelectFolder(undefined)}
-        className={`flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all ${
+        className={cn(
+          "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
           selectedFolderId === undefined
-            ? "bg-blue-600 border-blue-500 text-white shadow-sm"
-            : "bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/80"
-        }`}
+            ? "bg-gray-900 border-gray-900 text-white shadow-sm"
+            : "bg-white border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
+        )}
       >
         <Layers className="h-3.5 w-3.5" />
         <span>All Campaigns</span>
         {typeof totalCount === "number" && (
-          <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-black/20 text-white/90 font-mono">
+          <span
+            className={cn(
+              "px-1.5 py-0.2 rounded-full text-[10px] font-mono",
+              selectedFolderId === undefined
+                ? "bg-white/20 text-white"
+                : "bg-gray-100 text-gray-600"
+            )}
+          >
             {totalCount}
           </span>
         )}
       </button>
 
-      {/* Root (Uncategorized) */}
       <button
+        type="button"
         onClick={() => onSelectFolder(null)}
-        className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all ${
+        className={cn(
+          "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
           selectedFolderId === null
-            ? "bg-blue-600 border-blue-500 text-white shadow-sm"
-            : "bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/80"
-        }`}
+            ? "bg-gray-900 border-gray-900 text-white shadow-sm"
+            : "bg-white border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
+        )}
       >
-        <Folder className="h-3.5 w-3.5 text-slate-400" />
-        <span>Root (Unassigned)</span>
+        <Folder className="h-3.5 w-3.5" />
+        <span>Unassigned</span>
       </button>
 
-      {/* Custom Dynamic Campaign Folders */}
       {folders.map((folder) => {
         const isSelected = selectedFolderId === folder.id;
         return (
           <button
             key={folder.id}
+            type="button"
             onClick={() => onSelectFolder(folder.id)}
-            className={`flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all ${
+            className={cn(
+              "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
               isSelected
-                ? "bg-slate-800 border-blue-500/80 text-white shadow-sm"
-                : "bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/80"
-            }`}
+                ? "bg-gray-900 border-gray-900 text-white shadow-sm"
+                : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
+            )}
           >
             <span
-              className="h-2.5 w-2.5 rounded-full flex-shrink-0"
+              className="h-2.5 w-2.5 rounded-full shrink-0"
               style={{ backgroundColor: folder.color }}
             />
             <span>{folder.name}</span>
-            <span className="text-[10px] text-slate-400 font-mono">({folder.qr_count})</span>
+            <span className={cn("text-[10px] font-mono", isSelected ? "text-gray-300" : "text-gray-400")}>
+              {folder.qr_count}
+            </span>
           </button>
         );
       })}
 
-      {/* + New Campaign Folder */}
-      <button
+      <Button
+        variant="outline"
+        size="xs"
         onClick={onOpenNewFolderModal}
-        className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-dashed border-slate-700 hover:border-slate-500 text-slate-400 hover:text-white text-xs font-medium transition-all"
+        leftIcon={<Plus className="h-3.5 w-3.5" />}
+        className="shrink-0 rounded-full border-dashed"
       >
-        <Plus className="h-3.5 w-3.5 text-blue-400" />
-        <span>New Folder</span>
-      </button>
+        New Folder
+      </Button>
     </div>
   );
 }
-

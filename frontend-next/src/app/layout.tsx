@@ -4,9 +4,9 @@ import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SmartQR Platform | Enterprise Dynamic QR Code Engine",
+  title: "SmartQR — Dynamic QR Code Studio & Manager",
   description:
-    "Self-hosted, high-performance Smart Dynamic QR Code Generator, Real-Time Scannability Guard, and Audience Analytics.",
+    "Create, customize, track, and manage dynamic QR codes with real-time scannability protection.",
 };
 
 export default function RootLayout({
@@ -15,20 +15,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased selection:bg-blue-600/30 selection:text-blue-200">
+    <html lang="en">
+      <body className="font-sans antialiased bg-canvas text-ink selection:bg-blue-100 selection:text-blue-900">
         <Providers>
           {children}
           <Toaster
-            position="top-right"
-            theme="dark"
+            position="bottom-right"
+            theme="light"
             closeButton
             richColors
             toastOptions={{
               style: {
-                background: "#121824",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                color: "#f8fafc",
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+                color: "#111827",
+                boxShadow: "0 10px 25px -5px rgba(16, 24, 40, 0.1)",
               },
             }}
           />
@@ -37,4 +38,3 @@ export default function RootLayout({
     </html>
   );
 }
-

@@ -11,79 +11,83 @@ import {
   MapPin,
   ExternalLink,
   AlignLeft,
-  Info,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+  Shield,
 } from "lucide-react";
 import { useStudioStore } from "@/lib/store";
-import { ContentType, QRType } from "@/lib/types";
+import { ContentType } from "@/lib/types";
+import { Input, Textarea, Select, Label } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
-const CONTENT_TABS: { id: ContentType; label: string; icon: React.ElementType }[] = [
+const PRIMARY_TYPES: { id: ContentType; label: string; icon: React.ElementType }[] = [
   { id: "url", label: "Website", icon: Globe },
-  { id: "vcard", label: "vCard Plus", icon: Contact },
-  { id: "wifi", label: "Wi-Fi Pass", icon: Wifi },
+  { id: "wifi", label: "Wi-Fi", icon: Wifi },
+  { id: "vcard", label: "Contact Card", icon: Contact },
   { id: "whatsapp", label: "WhatsApp", icon: MessageSquare },
+  { id: "text", label: "Plain Text", icon: AlignLeft },
+];
+
+const MORE_TYPES: { id: ContentType; label: string; icon: React.ElementType }[] = [
   { id: "email", label: "Email", icon: Mail },
   { id: "sms", label: "SMS", icon: Smartphone },
   { id: "maps", label: "Location", icon: MapPin },
   { id: "applink", label: "App Link", icon: ExternalLink },
-  { id: "text", label: "Text", icon: AlignLeft },
 ];
 
 export function ContentSection() {
-  const {
-    title,
-    content_type,
-    qr_type,
-    target_url,
-    setField,
-  } = useStudioStore();
+  const { title, content_type, qr_type, target_url, setField } = useStudioStore();
+  const [showMoreTypes, setShowMoreTypes] = useState(
+    MORE_TYPES.some((t) => t.id === content_type)
+  );
 
-  // Local helper states for composite types
   const [vcard, setVcard] = useState({
     firstName: "Sarah",
     lastName: "Connor",
-    org: "Cyberdyne Systems",
-    title: "Chief Technology Officer",
+    org: "Acme Studio",
+    title: "Product Designer",
     phone: "+1 555 019 2834",
-    email: "sarah@cyberdyne.io",
-    website: "https://cyberdyne.io",
-    note: "Connect for enterprise inquiries",
+    email: "sarah@acme.io",
+    website: "https://acme.io",
+    note: "",
   });
 
   const [wifi, setWifi] = useState({
     ssid: "Office_Guest_5G",
     encryption: "WPA",
-    password: "SuperSecretPassword123",
+    password: "GuestPassword123",
     hidden: false,
   });
 
   const [whatsapp, setWhatsapp] = useState({
-    phone: "15551234567",
-    message: "Hi, I scanned your QR code and would like more details!",
+    phone: "8801700000000",
+    message: "Hello! I scanned your QR code.",
   });
 
   const [emailState, setEmailState] = useState({
-    to: "support@smartqr.io",
-    subject: "Inquiry from Smart QR Code",
-    body: "Hello team, I would like to learn more about your services.",
+    to: "hello@example.com",
+    subject: "Quick inquiry",
+    body: "Hi team, I would like to learn more.",
   });
 
   const [smsState, setSmsState] = useState({
-    phone: "15559876543",
-    message: "CONFIRM 1024",
+    phone: "+15559876543",
+    message: "Hi there!",
   });
 
   const [mapsState, setMapsState] = useState({
-    query: "Googleplex, Mountain View, CA",
+    query: "Gulshan 2, Dhaka, Bangladesh",
   });
 
   const [appLinkState, setAppLinkState] = useState({
-    scheme: "instagram://user?username=antigravity",
-    fallback: "https://instagram.com/antigravity",
+    scheme: "instagram://user?username=smartqr",
+    fallback: "https://instagram.com/smartqr",
   });
 
-  const [rawText, setRawText] = useState("Scan verified: SmartQR Engine 2.0");
+  const [rawText, setRawText] = useState("Hello from SmartQR!");
 
-  // Synchronize target_url when payload fields change
   useEffect(() => {
     let payload = target_url;
     if (content_type === "vcard") {
@@ -110,62 +114,26 @@ export function ContentSection() {
     }
   }, [content_type, vcard, wifi, whatsapp, emailState, smsState, mapsState, appLinkState, rawText]);
 
+  const visibleTypes = showMoreTypes ? [...PRIMARY_TYPES, ...MORE_TYPES] : PRIMARY_TYPES;
+
   return (
-    <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-sm space-y-5">
-      {/* Title & Type Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
-        <div className="flex-1">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">
-            QR Campaign Name
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setField("title", e.target.value)}
-            placeholder="e.g. Summer Promo 2026, VIP Wi-Fi Pass"
-            className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/80 transition-all font-medium"
-          />
-        </div>
-
-        {/* Dynamic vs Static Toggle */}
-        <div className="flex flex-col">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">
-            Routing Mode
-          </label>
-          <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 text-xs">
-            <button
-              type="button"
-              onClick={() => setField("qr_type", "dynamic")}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                qr_type === "dynamic"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              Dynamic (Trackable)
-            </button>
-            <button
-              type="button"
-              onClick={() => setField("qr_type", "static")}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                qr_type === "static"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              Static (Direct)
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Content Type Selector Tabs */}
+    <div className="space-y-6">
+      {/* QR Type Selection */}
       <div>
-        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
-          Payload Category
-        </label>
-        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-1.5">
-          {CONTENT_TABS.map((tab) => {
+        <div className="flex items-center justify-between mb-2">
+          <Label className="mb-0">What should this QR code open?</Label>
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={() => setShowMoreTypes(!showMoreTypes)}
+            rightIcon={showMoreTypes ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          >
+            {showMoreTypes ? "Less types" : "More types"}
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          {visibleTypes.map((tab) => {
             const Icon = tab.icon;
             const isActive = content_type === tab.id;
             return (
@@ -173,292 +141,320 @@ export function ContentSection() {
                 key={tab.id}
                 type="button"
                 onClick={() => setField("content_type", tab.id)}
-                className={`flex flex-col items-center justify-center p-2 rounded-xl border text-center transition-all ${
+                className={cn(
+                  "flex items-center justify-center sm:flex-col gap-2 sm:gap-1.5 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all",
                   isActive
-                    ? "bg-blue-600/15 border-blue-500/80 text-blue-400 shadow-sm shadow-blue-500/10"
-                    : "bg-slate-950/60 border-slate-800/80 text-slate-400 hover:border-slate-700 hover:text-slate-200"
-                }`}
+                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:text-gray-900 hover:bg-gray-50"
+                )}
               >
-                <Icon className="h-4 w-4 mb-1" />
-                <span className="text-[11px] font-medium leading-none">{tab.label}</span>
+                <Icon className="h-4 w-4 shrink-0" />
+                <span className="truncate">{tab.label}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Form Fields Based on Selected Content Type */}
-      <div className="pt-2">
+      {/* Campaign Name */}
+      <div>
+        <Label htmlFor="qr-title">QR Code Name</Label>
+        <Input
+          id="qr-title"
+          value={title}
+          onChange={(e) => setField("title", e.target.value)}
+          placeholder="e.g. Restaurant Menu, Office Wi-Fi, Business Card"
+        />
+      </div>
+
+      {/* Dynamic Payload Fields */}
+      <div className="pt-1">
         {content_type === "url" && (
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-slate-300">Destination Web URL</label>
-            <div className="relative">
-              <input
-                type="url"
-                value={target_url}
-                onChange={(e) => setField("target_url", e.target.value)}
-                placeholder="https://yourwebsite.com/landing"
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono placeholder-slate-500 focus:outline-none focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/80"
-              />
-            </div>
-            {qr_type === "dynamic" && (
-              <p className="text-[11px] text-slate-400 flex items-center gap-1.5">
-                <Info className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
-                Dynamic routing is enabled: Scans are logged with telemetry, and destination can be edited anytime without re-printing.
-              </p>
-            )}
+          <div>
+            <Label htmlFor="target-url">Destination Website URL</Label>
+            <Input
+              id="target-url"
+              type="url"
+              value={target_url}
+              onChange={(e) => setField("target_url", e.target.value)}
+              placeholder="https://yourwebsite.com"
+              className="font-mono text-xs"
+            />
           </div>
         )}
 
         {content_type === "vcard" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">First Name</label>
-              <input
-                type="text"
+              <Label>First Name</Label>
+              <Input
                 value={vcard.firstName}
                 onChange={(e) => setVcard({ ...vcard, firstName: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Last Name</label>
-              <input
-                type="text"
+              <Label>Last Name</Label>
+              <Input
                 value={vcard.lastName}
                 onChange={(e) => setVcard({ ...vcard, lastName: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Organization / Company</label>
-              <input
-                type="text"
+              <Label>Company</Label>
+              <Input
                 value={vcard.org}
                 onChange={(e) => setVcard({ ...vcard, org: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Job Title</label>
-              <input
-                type="text"
+              <Label>Job Title</Label>
+              <Input
                 value={vcard.title}
                 onChange={(e) => setVcard({ ...vcard, title: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Phone Number</label>
-              <input
-                type="text"
+              <Label>Phone</Label>
+              <Input
                 value={vcard.phone}
                 onChange={(e) => setVcard({ ...vcard, phone: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Email Address</label>
-              <input
+              <Label>Email</Label>
+              <Input
                 type="email"
                 value={vcard.email}
                 onChange={(e) => setVcard({ ...vcard, email: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-slate-400 mb-1 block">Website</label>
-              <input
+              <Label>Website</Label>
+              <Input
                 type="url"
                 value={vcard.website}
                 onChange={(e) => setVcard({ ...vcard, website: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>
           </div>
         )}
 
         {content_type === "wifi" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">Network Name (SSID)</label>
-              <input
-                type="text"
+              <Label>Network Name (SSID)</Label>
+              <Input
                 value={wifi.ssid}
                 onChange={(e) => setWifi({ ...wifi, ssid: e.target.value })}
-                placeholder="Office_Wi-Fi_5G"
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
+                placeholder="Office_WiFi"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Encryption Type</label>
-              <select
+              <Label>Security Type</Label>
+              <Select
                 value={wifi.encryption}
                 onChange={(e) => setWifi({ ...wifi, encryption: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               >
-                <option value="WPA">WPA / WPA2 / WPA3 (Standard)</option>
-                <option value="WEP">WEP (Legacy)</option>
-                <option value="nopass">None (Open Network)</option>
-              </select>
+                <option value="WPA">WPA / WPA2 / WPA3</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Open (No Password)</option>
+              </Select>
             </div>
             <div className="sm:col-span-2">
-              <label className="text-slate-400 mb-1 block">Password</label>
-              <input
-                type="text"
+              <Label>Wi-Fi Password</Label>
+              <Input
                 value={wifi.password}
                 onChange={(e) => setWifi({ ...wifi, password: e.target.value })}
-                placeholder="Password"
                 disabled={wifi.encryption === "nopass"}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono disabled:opacity-50"
+                placeholder="Enter network password"
               />
             </div>
-            <div className="sm:col-span-2 flex items-center gap-2 pt-1">
+            <label className="sm:col-span-2 flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
               <input
                 type="checkbox"
-                id="hidden-wifi"
                 checked={wifi.hidden}
                 onChange={(e) => setWifi({ ...wifi, hidden: e.target.checked })}
-                className="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0"
+                className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
               />
-              <label htmlFor="hidden-wifi" className="text-slate-300">
-                Hidden Network (Do not broadcast SSID)
-              </label>
-            </div>
+              <span>Hidden network (SSID is not broadcast)</span>
+            </label>
           </div>
         )}
 
         {content_type === "whatsapp" && (
-          <div className="space-y-3 text-xs">
+          <div className="space-y-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">Phone Number (with Country Code, no + or spaces)</label>
-              <input
-                type="text"
+              <Label>WhatsApp Number (with country code)</Label>
+              <Input
                 value={whatsapp.phone}
                 onChange={(e) => setWhatsapp({ ...whatsapp, phone: e.target.value })}
-                placeholder="15551234567"
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
+                placeholder="8801700000000"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Pre-filled Chat Message</label>
-              <textarea
+              <Label>Pre-filled Message</Label>
+              <Textarea
+                rows={3}
                 value={whatsapp.message}
                 onChange={(e) => setWhatsapp({ ...whatsapp, message: e.target.value })}
-                rows={3}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white resize-none"
               />
             </div>
           </div>
         )}
 
         {content_type === "email" && (
-          <div className="space-y-3 text-xs">
+          <div className="space-y-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">Recipient Email</label>
-              <input
+              <Label>Recipient Email</Label>
+              <Input
                 type="email"
                 value={emailState.to}
                 onChange={(e) => setEmailState({ ...emailState, to: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Subject</label>
-              <input
-                type="text"
+              <Label>Subject</Label>
+              <Input
                 value={emailState.subject}
                 onChange={(e) => setEmailState({ ...emailState, subject: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Message Body</label>
-              <textarea
+              <Label>Message</Label>
+              <Textarea
+                rows={3}
                 value={emailState.body}
                 onChange={(e) => setEmailState({ ...emailState, body: e.target.value })}
-                rows={3}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white resize-none"
               />
             </div>
           </div>
         )}
 
         {content_type === "sms" && (
-          <div className="space-y-3 text-xs">
+          <div className="space-y-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">Phone Number</label>
-              <input
-                type="text"
+              <Label>Phone Number</Label>
+              <Input
                 value={smsState.phone}
                 onChange={(e) => setSmsState({ ...smsState, phone: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">SMS Text</label>
-              <textarea
+              <Label>SMS Message</Label>
+              <Textarea
+                rows={2}
                 value={smsState.message}
                 onChange={(e) => setSmsState({ ...smsState, message: e.target.value })}
-                rows={2}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white resize-none"
               />
             </div>
           </div>
         )}
 
         {content_type === "maps" && (
-          <div className="space-y-2 text-xs">
-            <label className="text-slate-400 mb-1 block">Location / Address / Coordinates</label>
-            <input
-              type="text"
+          <div>
+            <Label>Address or Place Name</Label>
+            <Input
               value={mapsState.query}
               onChange={(e) => setMapsState({ ...mapsState, query: e.target.value })}
-              placeholder="e.g. 1600 Amphitheatre Parkway, Mountain View, CA"
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white"
+              placeholder="e.g. Gulshan 2, Dhaka"
             />
           </div>
         )}
 
         {content_type === "applink" && (
-          <div className="space-y-3 text-xs">
+          <div className="space-y-3.5">
             <div>
-              <label className="text-slate-400 mb-1 block">App URI Scheme</label>
-              <input
-                type="text"
+              <Label>App Deep Link URI</Label>
+              <Input
                 value={appLinkState.scheme}
                 onChange={(e) => setAppLinkState({ ...appLinkState, scheme: e.target.value })}
-                placeholder="instagram://user?username=antigravity"
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
+                placeholder="instagram://user?username=yourhandle"
+                className="font-mono text-xs"
               />
             </div>
             <div>
-              <label className="text-slate-400 mb-1 block">Web Fallback URL (if app not installed)</label>
-              <input
+              <Label>Web Fallback URL</Label>
+              <Input
                 type="url"
                 value={appLinkState.fallback}
                 onChange={(e) => setAppLinkState({ ...appLinkState, fallback: e.target.value })}
-                placeholder="https://instagram.com/antigravity"
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
+                placeholder="https://instagram.com/yourhandle"
+                className="font-mono text-xs"
               />
             </div>
           </div>
         )}
 
         {content_type === "text" && (
-          <div className="space-y-2 text-xs">
-            <label className="text-slate-400 mb-1 block">Plain Text / Serial Key / Raw Content</label>
-            <textarea
+          <div>
+            <Label>Text Content</Label>
+            <Textarea
+              rows={4}
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
-              rows={4}
-              placeholder="Enter text payload..."
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono resize-none"
+              placeholder="Write any text or code..."
             />
           </div>
         )}
       </div>
+
+      {/* Simple Dynamic vs Static Mode Cards */}
+      <div className="pt-2 border-t border-gray-100">
+        <Label>QR Mode</Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button
+            type="button"
+            onClick={() => setField("qr_type", "dynamic")}
+            className={cn(
+              "flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all",
+              qr_type === "dynamic"
+                ? "border-blue-600 bg-blue-50/50 ring-2 ring-blue-600/10"
+                : "border-gray-200 bg-white hover:border-gray-300"
+            )}
+          >
+            <div
+              className={cn(
+                "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
+                qr_type === "dynamic" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500"
+              )}
+            >
+              <Zap className="h-4 w-4" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-gray-900">Dynamic (Recommended)</div>
+              <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+                Edit destination anytime & track live scan analytics.
+              </p>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setField("qr_type", "static")}
+            className={cn(
+              "flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all",
+              qr_type === "static"
+                ? "border-gray-900 bg-gray-50 ring-2 ring-gray-900/10"
+                : "border-gray-200 bg-white hover:border-gray-300"
+            )}
+          >
+            <div
+              className={cn(
+                "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
+                qr_type === "static" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-500"
+              )}
+            >
+              <Shield className="h-4 w-4" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-gray-900">Static (Direct)</div>
+              <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+                Encodes data directly. Works offline, cannot be edited later.
+              </p>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
-

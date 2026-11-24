@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Eye, Square, Circle, Sparkles, Feather } from "lucide-react";
 import { useStudioStore } from "@/lib/store";
 import { EyeBall, EyeFrame } from "@/lib/types";
+import { Input, Label } from "@/components/ui/Input";
+import { cn } from "@/lib/utils";
 
 const EYE_FRAMES: { id: EyeFrame; label: string }[] = [
   { id: "square", label: "Square" },
@@ -25,38 +26,26 @@ export function EyeSelector() {
     eye_ball,
     eye_color,
     has_custom_eye_color,
-    fg_color,
     setField,
   } = useStudioStore();
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-sm space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Eye className="h-4 w-4 text-blue-400" />
-          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-            Corner Eye Geometries
-          </label>
-        </div>
-      </div>
-
+    <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Outer Frame Shape */}
         <div>
-          <label className="text-[11px] font-medium text-slate-400 mb-1.5 block">
-            Outer Eye Frame
-          </label>
+          <Label>Corner Outer Frame</Label>
           <div className="grid grid-cols-4 gap-1.5">
             {EYE_FRAMES.map((f) => (
               <button
                 key={f.id}
                 type="button"
                 onClick={() => setField("eye_frame", f.id)}
-                className={`py-2 px-1.5 rounded-xl border text-center text-xs font-medium transition-all ${
+                className={cn(
+                  "py-2 px-2 rounded-lg border text-xs font-medium transition-all",
                   eye_frame === f.id
-                    ? "bg-blue-600/15 border-blue-500/80 text-blue-400 shadow-sm"
-                    : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white"
-                }`}
+                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                )}
               >
                 {f.label}
               </button>
@@ -64,22 +53,20 @@ export function EyeSelector() {
           </div>
         </div>
 
-        {/* Inner Ball Shape */}
         <div>
-          <label className="text-[11px] font-medium text-slate-400 mb-1.5 block">
-            Inner Eye Ball
-          </label>
+          <Label>Corner Inner Dot</Label>
           <div className="grid grid-cols-4 gap-1.5">
             {EYE_BALLS.map((b) => (
               <button
                 key={b.id}
                 type="button"
                 onClick={() => setField("eye_ball", b.id)}
-                className={`py-2 px-1.5 rounded-xl border text-center text-xs font-medium transition-all ${
+                className={cn(
+                  "py-2 px-2 rounded-lg border text-xs font-medium transition-all",
                   eye_ball === b.id
-                    ? "bg-blue-600/15 border-blue-500/80 text-blue-400 shadow-sm"
-                    : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white"
-                }`}
+                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                )}
               >
                 {b.label}
               </button>
@@ -88,9 +75,8 @@ export function EyeSelector() {
         </div>
       </div>
 
-      {/* Custom Eye Color Tint */}
-      <div className="pt-2 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-3">
-        <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100">
+        <label className="flex items-center gap-2 cursor-pointer text-xs text-gray-700 font-medium">
           <input
             type="checkbox"
             checked={has_custom_eye_color}
@@ -101,9 +87,9 @@ export function EyeSelector() {
                 setField("eye_color", "#2563eb");
               }
             }}
-            className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-0"
+            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
           />
-          <span>Custom Eye Color (Distinct from QR Dots)</span>
+          <span>Use custom corner eye color</span>
         </label>
 
         {has_custom_eye_color && (
@@ -112,13 +98,12 @@ export function EyeSelector() {
               type="color"
               value={eye_color || "#2563eb"}
               onChange={(e) => setField("eye_color", e.target.value)}
-              className="h-7 w-7 rounded-lg border border-slate-700 bg-transparent cursor-pointer p-0.5"
+              className="h-8 w-8 rounded-lg border border-gray-200 bg-white cursor-pointer p-0.5"
             />
-            <input
-              type="text"
+            <Input
               value={eye_color || "#2563eb"}
               onChange={(e) => setField("eye_color", e.target.value)}
-              className="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white font-mono uppercase"
+              className="w-24 h-8 font-mono text-xs uppercase"
             />
           </div>
         )}
@@ -126,4 +111,3 @@ export function EyeSelector() {
     </div>
   );
 }
-

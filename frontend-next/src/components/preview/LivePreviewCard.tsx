@@ -1,30 +1,28 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { ExternalLink, RefreshCw, Smartphone, QrCode } from "lucide-react";
+import { ExternalLink, RefreshCw, QrCode } from "lucide-react";
 import { api } from "@/lib/api";
 import { useStudioStore } from "@/lib/store";
 import { ScannabilityGuard } from "./ScannabilityGuard";
 import { ExportBar } from "./ExportBar";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 
 export function LivePreviewCard() {
   const store = useStudioStore();
   const [blob, setBlob] = useState<Blob | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const currentBlobUrlRef = useRef<string | null>(null);
 
-  // Debounced live preview generation
   useEffect(() => {
     setLoading(true);
-    setError(null);
 
     const timer = setTimeout(async () => {
       try {
         const payload = store.getPayload();
         const previewBlob = await api.preview(payload);
 
-        // Revoke previous object url to prevent memory leaks
         if (currentBlobUrlRef.current) {
           URL.revokeObjectURL(currentBlobUrlRef.current);
         }
@@ -34,11 +32,10 @@ export function LivePreviewCard() {
         store.setField("previewBlobUrl", newUrl);
         setBlob(previewBlob);
         setLoading(false);
-      } catch (err: any) {
-        setError("Preview generation failed");
+      } catch {
         setLoading(false);
       }
-    }, 280);
+    }, 260);
 
     return () => clearTimeout(timer);
   }, [
@@ -62,7 +59,6 @@ export function LivePreviewCard() {
     store.frame_color,
   ]);
 
-  // Clean up on unmount
   useEffect(() => {
     return () => {
       if (currentBlobUrlRef.current) {
@@ -72,77 +68,69 @@ export function LivePreviewCard() {
   }, []);
 
   return (
-    <div className="sticky top-20 space-y-4">
-      {/* Visual Canvas Card */}
-      <div className="bg-slate-900/70 border border-slate-800/80 rounded-3xl p-5 backdrop-blur-md shadow-2xl shadow-black/40">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-              Live Real-Time Engine
-            </span>
+    <div className="sticky top-24 space-y-4">
+      <Card>
+        <CardContent className="p-5 space-y-4">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-900">Live Preview</span>
+            {loading ? (
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-gray-500">
+                <RefreshCw className="h-3 w-3 animate-spin" />
+                Updating...
+              </span>
+            ) : (
+              <Badge variant={store.qr_type === "dynamic" ? "info" : "default"}>
+                {store.qr_type === "dynamic" ? "Dynamic" : "Static"}
+              </Badge>
+            )}
           </div>
-          {loading && (
-            <div className="flex items-center gap-1.5 text-xs text-blue-400">
-              <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-              <span>Rendering</span>
-            </div>
-          )}
-        </div>
 
-        {/* QR Display Frame */}
-        <div className="relative aspect-square w-full max-w-[320px] mx-auto rounded-2xl bg-gradient-to-b from-slate-950 to-slate-900 border border-slate-800/80 p-5 flex items-center justify-center shadow-inner overflow-hidden">
-          {/* Subtle micro dot grid background */}
-          <div className="absolute inset-0 bg-dot-pattern opacity-40 pointer-events-none" />
+          {/* QR Canvas */}
+          <div className="relative aspect-square w-full max-w-[280px] mx-auto rounded-2xl bg-preview-grid border border-gray-200/80 p-5 flex items-center justify-center overflow-hidden">
+            {store.previewBlobUrl ? (
+              <img
+                src={store.previewBlobUrl}
+                alt="QR Code Preview"
+                className={`max-h-full max-w-full object-contain rounded-lg transition-opacity duration-200 ${
+                  loading ? "opacity-70" : "opacity-100"
+                }`}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center text-gray-400">
+                <QrCode className="h-12 w-12 stroke-[1.2] mb-2 animate-pulse" />
+                <span className="text-xs">Generating preview...</span>
+              </div>
+            )}
+          </div>
 
-          {store.previewBlobUrl ? (
-            <img
-              src={store.previewBlobUrl}
-              alt="Dynamic QR Code Preview"
-              className={`relative z-10 max-h-full max-w-full object-contain rounded-lg transition-opacity duration-200 ${
-                loading ? "opacity-75 blur-[0.5px]" : "opacity-100"
-              }`}
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-slate-500">
-              <QrCode className="h-12 w-12 stroke-[1.2] mb-2 text-slate-600 animate-pulse" />
-              <span className="text-xs">Preparing preview...</span>
-            </div>
-          )}
-        </div>
-
-        {/* Target Destination Bar */}
-        <div className="mt-4 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/70 text-xs">
-          <div className="min-w-0 flex-1">
-            <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
-              {store.qr_type === "dynamic" ? "Tracked Destination" : "Static Payload"}
-            </span>
-            <span className="text-slate-300 font-mono text-[11px] truncate block">
+          {/* Target Preview Pill */}
+          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200/70 text-xs">
+            <span className="text-gray-600 font-mono text-[11px] truncate flex-1">
               {store.target_url}
             </span>
+            {store.target_url.startsWith("http") && (
+              <a
+                href={store.target_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-900 transition-colors shrink-0"
+                title="Open URL"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            )}
           </div>
-          {store.target_url.startsWith("http") && (
-            <a
-              href={store.target_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all flex-shrink-0"
-              title="Open Destination"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          )}
-        </div>
 
-        {/* Export & Primary Action Controls */}
-        <div className="mt-4 pt-4 border-t border-slate-800/60">
-          <ExportBar previewBlob={blob} />
-        </div>
-      </div>
+          {/* Primary Save & Export Actions */}
+          <div className="pt-2 border-t border-gray-100">
+            <ExportBar previewBlob={blob} />
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Scannability Guard */}
+      {/* Scannability Widget */}
       <ScannabilityGuard />
     </div>
   );
 }
-

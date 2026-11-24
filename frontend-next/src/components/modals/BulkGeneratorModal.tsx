@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { X, FileSpreadsheet, Upload, Download, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { FileSpreadsheet, Upload, Download, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
 
 interface BulkGeneratorModalProps {
   isOpen: boolean;
@@ -15,8 +17,6 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
   const [isUploading, setIsUploading] = useState(false);
   const [csvPreview, setCsvPreview] = useState<string[][]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  if (!isOpen) return null;
 
   const handleDownloadTemplate = async () => {
     try {
@@ -46,7 +46,6 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
 
     setFile(selectedFile);
 
-    // Read preview lines
     const reader = new FileReader();
     reader.onload = (event) => {
       const text = event.target?.result as string;
@@ -55,8 +54,7 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
         .map((l) => l.trim())
         .filter(Boolean)
         .slice(0, 6);
-      const parsed = lines.map((line) => line.split(",").map((c) => c.trim()));
-      setCsvPreview(parsed);
+      setCsvPreview(lines.map((line) => line.split(",").map((c) => c.trim())));
     };
     reader.readAsText(selectedFile);
   };
@@ -73,13 +71,13 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
       const url = URL.createObjectURL(zipBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `smartqr-bulk-package-${Date.now()}.zip`;
+      link.download = `smartqr-bulk-${Date.now()}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
-      toast.success("Bulk QR Archive Generated & Downloaded!");
+      toast.success("Bulk QR ZIP archive generated!");
       onClose();
     } catch (err: any) {
       toast.error(err?.message || "Failed to process bulk QR batch");
@@ -89,148 +87,117 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl shadow-black/60">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <FileSpreadsheet className="h-5 w-5 text-blue-400" />
-            <h3 className="font-semibold text-white text-sm">Bulk QR Generator Engine</h3>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Bulk QR Generator"
+      description="Generate up to 500 QR codes from a single CSV file"
+      icon={<FileSpreadsheet className="h-4 w-4" />}
+      maxWidth="xl"
+      footer={
+        <>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            loading={isUploading}
+            disabled={!file}
+            onClick={handleGenerate}
+            leftIcon={<Download className="h-4 w-4" />}
           >
-            <X className="h-4 w-4" />
-          </button>
+            {isUploading ? "Generating ZIP..." : "Generate & Download ZIP"}
+          </Button>
+        </>
+      }
+    >
+      <div className="space-y-5 text-xs text-gray-600">
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <div>
+            <div className="font-semibold text-gray-900">Need the CSV format?</div>
+            <div className="text-[11px] text-gray-500 mt-0.5">
+              Download our ready-to-use CSV template with example rows.
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadTemplate}
+            leftIcon={<Download className="h-3.5 w-3.5" />}
+          >
+            Template
+          </Button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-5 text-xs text-slate-300">
-          <p className="leading-relaxed">
-            Generate up to <strong className="text-white">500 branded QR codes in one batch</strong>.
-            The platform will automatically generate all individual high-resolution PNGs and a summary{" "}
-            <code className="text-blue-300 bg-slate-950 px-1 py-0.5 rounded">manifest.csv</code> bundled into a single ZIP file.
-          </p>
-
-          {/* Template Download Box */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
-            <div>
-              <div className="font-medium text-white mb-0.5">Need the CSV structure?</div>
-              <div className="text-[11px] text-slate-400">Download our formatted CSV template with example columns.</div>
-            </div>
-            <button
-              type="button"
-              onClick={handleDownloadTemplate}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-white border border-slate-700 font-medium transition-all"
-            >
-              <Download className="h-3.5 w-3.5" />
-              <span>Download Template</span>
-            </button>
-          </div>
-
-          {/* Upload Dropzone */}
-          <div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept=".csv"
-              className="hidden"
-              id="bulk-csv-input"
-            />
-            <label
-              htmlFor="bulk-csv-input"
-              className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed cursor-pointer transition-all ${
-                file
-                  ? "border-emerald-500/50 bg-emerald-950/10"
-                  : "border-slate-800 hover:border-slate-700 bg-slate-950/40"
-              }`}
-            >
-              {file ? (
-                <div className="text-center">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
-                  <div className="font-medium text-white">{file.name}</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
-                    {(file.size / 1024).toFixed(1)} KB • Click to choose a different CSV
-                  </div>
+        <div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".csv"
+            className="hidden"
+            id="bulk-csv-input"
+          />
+          <label
+            htmlFor="bulk-csv-input"
+            className={`flex flex-col items-center justify-center p-7 rounded-2xl border-2 border-dashed cursor-pointer transition-all ${
+              file
+                ? "border-emerald-300 bg-emerald-50/40"
+                : "border-gray-200 hover:border-gray-300 bg-gray-50/50 hover:bg-gray-50"
+            }`}
+          >
+            {file ? (
+              <div className="text-center">
+                <CheckCircle2 className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
+                <div className="font-semibold text-gray-900">{file.name}</div>
+                <div className="text-[11px] text-gray-500 mt-0.5">
+                  {(file.size / 1024).toFixed(1)} KB • Click to replace file
                 </div>
-              ) : (
-                <div className="text-center">
-                  <Upload className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-                  <div className="font-medium text-white">Click or drag & drop CSV file</div>
-                  <div className="text-[11px] text-slate-500 mt-1">
-                    Columns: title, target_url, qr_type, fg_color, bg_color
-                  </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <Upload className="h-7 w-7 text-gray-400 mx-auto mb-2" />
+                <div className="font-semibold text-gray-900">Click to select CSV file</div>
+                <div className="text-[11px] text-gray-500 mt-1">
+                  Columns: title, target_url, qr_type, fg_color, bg_color
                 </div>
-              )}
-            </label>
-          </div>
+              </div>
+            )}
+          </label>
+        </div>
 
-          {/* CSV Preview */}
-          {csvPreview.length > 0 && (
-            <div className="space-y-1.5">
-              <span className="text-[11px] font-medium text-slate-400">
-                Preview ({csvPreview.length - 1} rows parsed):
-              </span>
-              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80 p-2 font-mono text-[10px]">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-slate-400">
-                      {csvPreview[0]?.map((col, idx) => (
-                        <th key={idx} className="pb-1 px-2 font-semibold">
-                          {col}
-                        </th>
+        {csvPreview.length > 0 && (
+          <div className="space-y-1.5">
+            <span className="text-[11px] font-medium text-gray-500">
+              Preview ({Math.max(0, csvPreview.length - 1)} sample rows):
+            </span>
+            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white font-mono text-[11px]">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50 text-gray-600">
+                    {csvPreview[0]?.map((col, idx) => (
+                      <th key={idx} className="py-2 px-3 font-semibold">
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {csvPreview.slice(1).map((row, rIdx) => (
+                    <tr key={rIdx} className="text-gray-700">
+                      {row.map((val, cIdx) => (
+                        <td key={cIdx} className="py-1.5 px-3 truncate max-w-[160px]">
+                          {val}
+                        </td>
                       ))}
                     </tr>
-                  </thead>
-                  <tbody>
-                    {csvPreview.slice(1).map((row, rIdx) => (
-                      <tr key={rIdx} className="border-b border-slate-900/60 text-slate-300">
-                        {row.map((val, cIdx) => (
-                          <td key={cIdx} className="py-1 px-2 truncate max-w-[140px]">
-                            {val}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-800 bg-slate-950/40">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs font-medium transition-all"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            disabled={!file || isUploading}
-            onClick={handleGenerate}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs shadow-md shadow-blue-600/20 transition-all disabled:opacity-50"
-          >
-            {isUploading ? (
-              <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                <span>Processing Batch...</span>
-              </>
-            ) : (
-              <>
-                <Download className="h-3.5 w-3.5" />
-                <span>Generate & Download ZIP</span>
-              </>
-            )}
-          </button>
-        </div>
+          </div>
+        )}
       </div>
-    </div>
+    </Modal>
   );
 }
-

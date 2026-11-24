@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  ExternalLink,
   Copy,
   Check,
   BarChart2,
@@ -13,11 +12,12 @@ import {
   Clock,
   Hash,
   Download,
-  Folder,
 } from "lucide-react";
 import { toast } from "sonner";
 import { QRCodeRecord } from "@/lib/types";
 import { copyToClipboard } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 interface QrCardProps {
   qr: QRCodeRecord;
@@ -45,7 +45,7 @@ export function QrCard({
     const success = await copyToClipboard(shortUrl);
     if (success) {
       setCopied(true);
-      toast.success("Short redirect URL copied!");
+      toast.success("Short link copied");
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -63,12 +63,11 @@ export function QrCard({
   const isExpired = qr.expires_at && new Date(qr.expires_at) < new Date();
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800/80 hover:border-slate-700/80 rounded-2xl p-4 backdrop-blur-sm transition-all flex flex-col justify-between group">
-      {/* Top Details & Thumbnail */}
+    <div className="bg-white border border-gray-200/90 hover:border-gray-300 rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
       <div className="space-y-3">
-        <div className="flex items-start gap-3">
-          {/* Thumbnail */}
-          <div className="h-16 w-16 rounded-xl bg-slate-950 border border-slate-800/80 p-1.5 flex items-center justify-center flex-shrink-0 group-hover:border-blue-500/40 transition-all">
+        {/* Top Row: Thumbnail + Info */}
+        <div className="flex items-start gap-3.5">
+          <div className="h-16 w-16 rounded-xl bg-gray-50 border border-gray-200/80 p-1.5 flex items-center justify-center shrink-0">
             <img
               src={`/api/qr/${qr.id}/image`}
               alt={qr.title}
@@ -77,149 +76,127 @@ export function QrCard({
             />
           </div>
 
-          {/* Title & Tags */}
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5 mb-1">
-              <span
-                className={`px-1.5 py-0.2 rounded text-[10px] font-semibold uppercase tracking-wider ${
-                  qr.qr_type === "dynamic"
-                    ? "bg-blue-500/15 text-blue-400 border border-blue-500/20"
-                    : "bg-slate-800 text-slate-400 border border-slate-700"
-                }`}
-              >
+              <Badge variant={qr.qr_type === "dynamic" ? "info" : "default"}>
                 {qr.qr_type}
-              </span>
-              <span className="px-1.5 py-0.2 rounded text-[10px] font-medium uppercase tracking-wider bg-slate-950 text-slate-400 border border-slate-800">
+              </Badge>
+              <Badge variant="outline" className="uppercase text-[10px]">
                 {qr.content_type}
-              </span>
+              </Badge>
             </div>
 
-            <h4 className="font-semibold text-white text-sm truncate" title={qr.title}>
+            <h4 className="font-semibold text-gray-900 text-sm truncate" title={qr.title}>
               {qr.title}
             </h4>
-
-            <div className="text-[11px] text-slate-400 font-mono truncate mt-0.5" title={qr.target_url}>
+            <p className="text-[11px] text-gray-500 font-mono truncate mt-0.5" title={qr.target_url}>
               {qr.target_url}
-            </div>
+            </p>
           </div>
         </div>
 
-        {/* Short Code & Status Badges */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          {/* Direct Short Link Pill */}
+        {/* Meta Pills */}
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-950/80 hover:bg-slate-800 border border-slate-800/80 text-slate-300 hover:text-white text-[11px] font-mono transition-all"
-            title="Click to copy short code link"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200/80 text-gray-700 text-[11px] font-mono transition-colors"
+            title="Copy short redirect link"
           >
-            {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3 text-slate-400" />}
+            {copied ? (
+              <Check className="h-3 w-3 text-emerald-600" />
+            ) : (
+              <Copy className="h-3 w-3 text-gray-400" />
+            )}
             <span>/r/{qr.short_code}</span>
           </button>
 
-          {/* Total Scans Pill */}
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-950/80 border border-slate-800/80 text-blue-400 text-[11px] font-mono font-medium">
-            <BarChart2 className="h-3 w-3" />
-            <span>{qr.scan_count} scans</span>
-          </span>
+          <Badge variant="default" className="font-mono">
+            <BarChart2 className="h-3 w-3 text-gray-500" />
+            {qr.scan_count} scans
+          </Badge>
 
-          {/* Password Locked Badge */}
           {qr.is_password_protected && (
-            <span
-              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-amber-500/15 text-amber-300 border border-amber-500/20"
-              title="PIN Gate Active"
-            >
+            <Badge variant="warning">
               <Lock className="h-2.5 w-2.5" />
-              <span>PIN</span>
-            </span>
+              PIN
+            </Badge>
           )}
 
-          {/* Expiration Badge */}
           {qr.expires_at && (
-            <span
-              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] ${
-                isExpired
-                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                  : "bg-slate-800 text-slate-300"
-              }`}
-            >
+            <Badge variant={isExpired ? "danger" : "outline"}>
               <Clock className="h-2.5 w-2.5" />
-              <span>{isExpired ? "Expired" : "Timed"}</span>
-            </span>
+              {isExpired ? "Expired" : "Timed"}
+            </Badge>
           )}
 
-          {/* Scan Limit Badge */}
           {qr.scan_limit && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">
+            <Badge variant="outline">
               <Hash className="h-2.5 w-2.5" />
-              <span>Max {qr.scan_limit}</span>
-            </span>
+              Max {qr.scan_limit}
+            </Badge>
           )}
 
-          {/* Smart Rules Badge */}
           {typeof qr.rules_count === "number" && qr.rules_count > 0 && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-purple-500/15 text-purple-300 border border-purple-500/20">
+            <Badge variant="info">
               <GitFork className="h-2.5 w-2.5" />
-              <span>{qr.rules_count} rules</span>
-            </span>
+              {qr.rules_count} rules
+            </Badge>
           )}
         </div>
       </div>
 
-      {/* Action Bar */}
-      <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-800/60 text-xs">
+      {/* Action Footer */}
+      <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-100">
         <div className="flex items-center gap-1">
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => onOpenAnalytics(qr)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
             title="View Analytics"
           >
-            <BarChart2 className="h-4 w-4 text-blue-400" />
-          </button>
-
-          <button
-            type="button"
+            <BarChart2 className="h-4 w-4 text-gray-600" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => onOpenRules(qr)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
-            title="Configure Smart Routing Rules"
+            title="Smart Routing Rules"
           >
-            <GitFork className="h-4 w-4 text-indigo-400" />
-          </button>
-
-          <button
-            type="button"
+            <GitFork className="h-4 w-4 text-gray-600" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => onOpenEdit(qr)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
             title="Edit Destination"
           >
-            <Edit className="h-4 w-4 text-slate-300" />
-          </button>
-
-          <button
-            type="button"
+            <Edit className="h-4 w-4 text-gray-600" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={handleDownload}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
             title="Download PNG"
           >
-            <Download className="h-4 w-4 text-emerald-400" />
-          </button>
+            <Download className="h-4 w-4 text-gray-600" />
+          </Button>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => {
-            if (confirm(`Are you sure you want to delete QR code "${qr.title}"?`)) {
+            if (confirm(`Delete QR code "${qr.title}"?`)) {
               onDelete(qr.id);
             }
           }}
-          className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-all"
           title="Delete QR"
+          className="hover:text-red-600 hover:bg-red-50"
         >
           <Trash2 className="h-4 w-4" />
-        </button>
+        </Button>
       </div>
     </div>
   );
 }
-

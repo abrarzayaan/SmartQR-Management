@@ -3,7 +3,9 @@
 import React, { useMemo } from "react";
 import { ShieldAlert, ShieldCheck, AlertTriangle, Wand2 } from "lucide-react";
 import { useStudioStore } from "@/lib/store";
-import { calculateScannabilityScore, getContrastRatio } from "@/lib/utils";
+import { calculateScannabilityScore, getContrastRatio, cn } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 export function ScannabilityGuard() {
   const {
@@ -41,87 +43,74 @@ export function ScannabilityGuard() {
   const isWarning = status === "warning";
 
   return (
-    <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-sm space-y-3">
-      {/* Header and Score */}
-      <div className="flex items-center justify-between">
+    <div className="bg-white border border-gray-200/90 rounded-2xl p-4 shadow-card space-y-3">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {status === "optimal" ? (
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
           ) : isWarning ? (
-            <AlertTriangle className="h-4 w-4 text-amber-400" />
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
           ) : (
-            <ShieldAlert className="h-4 w-4 text-rose-400" />
+            <ShieldAlert className="h-4 w-4 text-red-600" />
           )}
-          <span className="text-xs font-semibold text-slate-200 tracking-wide uppercase">
-            Scannability Guard
-          </span>
+          <span className="text-xs font-semibold text-gray-900">Scannability Check</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span
-            className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full ${
-              status === "optimal"
-                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                : isWarning
-                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                : "bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse"
-            }`}
-          >
-            {evaluation.score}% {status.toUpperCase()}
-          </span>
-        </div>
+        <Badge
+          variant={status === "optimal" ? "success" : isWarning ? "warning" : "danger"}
+          className="font-mono"
+        >
+          {evaluation.score}% {evaluation.grade}
+        </Badge>
       </div>
 
       {/* Progress Bar */}
-      <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
         <div
-          className={`h-full transition-all duration-300 rounded-full ${
+          className={cn(
+            "h-full transition-all duration-300 rounded-full",
             status === "optimal"
               ? "bg-emerald-500"
               : isWarning
               ? "bg-amber-500"
-              : "bg-rose-500"
-          }`}
+              : "bg-red-500"
+          )}
           style={{ width: `${evaluation?.score ?? 95}%` }}
         />
       </div>
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
-        <div className="bg-slate-950/60 border border-slate-800/80 rounded-xl p-2">
-          <span className="text-slate-400 block mb-0.5">WCAG 2.1 Contrast</span>
-          <span className="text-white font-mono font-semibold">{contrastRatio.toFixed(1)}:1</span>
-        </div>
-        <div className="bg-slate-950/60 border border-slate-800/80 rounded-xl p-2">
-          <span className="text-slate-400 block mb-0.5">Error Correction</span>
-          <span className="text-white font-mono font-semibold">EC-{error_correction} (30% Max)</span>
-        </div>
+      {/* Compact Metrics */}
+      <div className="flex items-center justify-between text-[11px] text-gray-500">
+        <span>
+          Contrast: <strong className="text-gray-900 font-mono">{contrastRatio.toFixed(1)}:1</strong>
+        </span>
+        <span>
+          Resilience: <strong className="text-gray-900 font-mono">EC-{error_correction}</strong>
+        </span>
       </div>
 
-      {/* Issues or Recommendations */}
+      {/* Issues */}
       {evaluation?.issues && evaluation.issues.length > 0 && (
-        <div className="space-y-1 pt-1">
+        <div className="rounded-xl bg-amber-50/80 border border-amber-200/60 p-2.5 space-y-1">
           {evaluation.issues.map((issue, idx) => (
-            <p key={idx} className="text-[11px] text-amber-300/90 flex items-start gap-1.5 leading-snug">
-              <span className="text-amber-400 mt-0.5">•</span>
-              <span>{issue}</span>
+            <p key={idx} className="text-[11px] text-amber-800 leading-snug">
+              • {issue}
             </p>
           ))}
         </div>
       )}
 
-      {/* 1-Click Auto-Fix Contrast Button */}
       {(isLowContrast || isWarning) && (
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={autoFixContrast}
-          className="w-full mt-2 inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-medium transition-all"
+          leftIcon={<Wand2 className="h-3.5 w-3.5 text-blue-600" />}
+          className="w-full"
         >
-          <Wand2 className="h-3.5 w-3.5 text-blue-400" />
-          <span>Auto-Fix Contrast (Guaranteed Scan)</span>
-        </button>
+          Auto-Fix Contrast
+        </Button>
       )}
     </div>
   );
 }
-
