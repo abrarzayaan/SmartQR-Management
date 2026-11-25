@@ -86,8 +86,8 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900 tracking-tight">My QR Codes</h1>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <h1 className="text-xl font-semibold text-ink tracking-tight">My QR Codes</h1>
+          <p className="text-xs text-ink-muted mt-0.5">
             Manage campaigns, edit destinations, and view real-time scan analytics.
           </p>
         </div>
@@ -95,7 +95,7 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
           variant="outline"
           size="sm"
           onClick={onOpenBulkModal}
-          leftIcon={<FileSpreadsheet className="h-3.5 w-3.5 text-gray-500" />}
+          leftIcon={<FileSpreadsheet className="h-3.5 w-3.5 text-ink-muted" />}
           className="sm:hidden self-start"
         >
           Bulk CSV Generator
@@ -108,11 +108,11 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
           const Icon = item.icon;
           return (
             <Card key={item.label} className="p-4">
-              <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+              <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
                 <span>{item.label}</span>
-                <Icon className="h-4 w-4 text-gray-400" />
+                <Icon className="h-4 w-4 text-ink-muted" />
               </div>
-              <div className="text-2xl font-semibold font-mono text-gray-900 tracking-tight">
+              <div className="text-2xl font-semibold font-mono text-ink tracking-tight">
                 {item.value}
               </div>
             </Card>
@@ -131,7 +131,7 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
       {/* Search & Type Filter */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1">
-          <Search className="h-4 w-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="h-4 w-4 text-ink-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -140,7 +140,7 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
           />
         </div>
 
-        <div className="inline-flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200/70 self-start sm:self-auto">
+        <div className="inline-flex items-center bg-elevated p-1 rounded-xl border border-line self-start sm:self-auto">
           {["all", "dynamic", "static"].map((t) => (
             <button
               key={t}
@@ -149,8 +149,8 @@ export function ManagerView({ onOpenBulkModal, onOpenNewFolderModal }: ManagerVi
               className={cn(
                 "px-3 py-1.5 rounded-lg capitalize text-xs font-medium transition-all",
                 qrType === t
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-elevated text-ink shadow-sm"
+                  : "text-ink-secondary hover:text-ink"
               )}
             >
               {t}

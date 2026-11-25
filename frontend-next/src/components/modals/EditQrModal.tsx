@@ -89,7 +89,7 @@ export function EditQrModal({ qr, onClose }: EditQrModalProps) {
             onChange={(e) => setTargetUrl(e.target.value)}
             className="font-mono text-xs"
           />
-          <p className="text-[11px] text-gray-500 mt-1">
+          <p className="text-[11px] text-ink-muted mt-1">
             Dynamic QR codes redirect to the new destination immediately.
           </p>
         </div>

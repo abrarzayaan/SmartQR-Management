@@ -144,8 +144,8 @@ export function ContentSection() {
                 className={cn(
                   "flex items-center justify-center sm:flex-col gap-2 sm:gap-1.5 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all",
                   isActive
-                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:text-gray-900 hover:bg-gray-50"
+                    ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                    : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:text-ink hover:bg-elevated"
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0" />
@@ -269,12 +269,12 @@ export function ContentSection() {
                 placeholder="Enter network password"
               />
             </div>
-            <label className="sm:col-span-2 flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+            <label className="sm:col-span-2 flex items-center gap-2 text-xs text-ink-secondary cursor-pointer">
               <input
                 type="checkbox"
                 checked={wifi.hidden}
                 onChange={(e) => setWifi({ ...wifi, hidden: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                className="h-4 w-4 rounded border-line-strong text-ink focus:ring-emerald-400"
               />
               <span>Hidden network (SSID is not broadcast)</span>
             </label>
@@ -399,7 +399,7 @@ export function ContentSection() {
       </div>
 
       {/* Simple Dynamic vs Static Mode Cards */}
-      <div className="pt-2 border-t border-gray-100">
+      <div className="pt-2 border-t border-line">
         <Label>QR Mode</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <button
@@ -408,21 +408,21 @@ export function ContentSection() {
             className={cn(
               "flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all",
               qr_type === "dynamic"
-                ? "border-blue-600 bg-blue-50/50 ring-2 ring-blue-600/10"
-                : "border-gray-200 bg-white hover:border-gray-300"
+                ? "border-emerald-500/70 bg-emerald-500/10 ring-2 ring-emerald-500/15"
+                : "border-line bg-canvas hover:border-line-strong"
             )}
           >
             <div
               className={cn(
                 "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
-                qr_type === "dynamic" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500"
+                qr_type === "dynamic" ? "bg-emerald-500 text-zinc-950" : "bg-elevated text-ink-muted"
               )}
             >
               <Zap className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-gray-900">Dynamic (Recommended)</div>
-              <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+              <div className="text-xs font-semibold text-ink">Dynamic (Recommended)</div>
+              <p className="text-[11px] text-ink-muted mt-0.5 leading-snug">
                 Edit destination anytime & track live scan analytics.
               </p>
             </div>
@@ -434,21 +434,21 @@ export function ContentSection() {
             className={cn(
               "flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all",
               qr_type === "static"
-                ? "border-gray-900 bg-gray-50 ring-2 ring-gray-900/10"
-                : "border-gray-200 bg-white hover:border-gray-300"
+                ? "border-zinc-400 bg-elevated ring-2 ring-zinc-400/15"
+                : "border-line bg-canvas hover:border-line-strong"
             )}
           >
             <div
               className={cn(
                 "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
-                qr_type === "static" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-500"
+                qr_type === "static" ? "bg-zinc-200 text-zinc-950" : "bg-elevated text-ink-muted"
               )}
             >
               <Shield className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-gray-900">Static (Direct)</div>
-              <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+              <div className="text-xs font-semibold text-ink">Static (Direct)</div>
+              <p className="text-[11px] text-ink-muted mt-0.5 leading-snug">
                 Encodes data directly. Works offline, cannot be edited later.
               </p>
             </div>

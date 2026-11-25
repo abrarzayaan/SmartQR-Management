@@ -34,8 +34,8 @@ export function FolderCampaignBar({
         className={cn(
           "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
           selectedFolderId === undefined
-            ? "bg-gray-900 border-gray-900 text-white shadow-sm"
-            : "bg-white border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
+            ? "bg-emerald-500 border-emerald-400 text-zinc-950 font-semibold shadow-sm"
+            : "bg-surface border-line text-ink-secondary hover:text-ink hover:border-line-strong"
         )}
       >
         <Layers className="h-3.5 w-3.5" />
@@ -45,8 +45,8 @@ export function FolderCampaignBar({
             className={cn(
               "px-1.5 py-0.2 rounded-full text-[10px] font-mono",
               selectedFolderId === undefined
-                ? "bg-white/20 text-white"
-                : "bg-gray-100 text-gray-600"
+                ? "bg-zinc-950/20 text-zinc-950"
+                : "bg-elevated text-ink-secondary"
             )}
           >
             {totalCount}
@@ -60,8 +60,8 @@ export function FolderCampaignBar({
         className={cn(
           "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
           selectedFolderId === null
-            ? "bg-gray-900 border-gray-900 text-white shadow-sm"
-            : "bg-white border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300"
+            ? "bg-emerald-500 border-emerald-400 text-zinc-950 font-semibold shadow-sm"
+            : "bg-surface border-line text-ink-secondary hover:text-ink hover:border-line-strong"
         )}
       >
         <Folder className="h-3.5 w-3.5" />
@@ -78,8 +78,8 @@ export function FolderCampaignBar({
             className={cn(
               "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
               isSelected
-                ? "bg-gray-900 border-gray-900 text-white shadow-sm"
-                : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
+                ? "bg-emerald-500 border-emerald-400 text-zinc-950 font-semibold shadow-sm"
+                : "bg-surface border-line text-ink-secondary hover:text-ink hover:border-line-strong"
             )}
           >
             <span
@@ -87,7 +87,7 @@ export function FolderCampaignBar({
               style={{ backgroundColor: folder.color }}
             />
             <span>{folder.name}</span>
-            <span className={cn("text-[10px] font-mono", isSelected ? "text-gray-300" : "text-gray-400")}>
+            <span className={cn("text-[10px] font-mono", isSelected ? "text-gray-300" : "text-ink-muted")}>
               {folder.qr_count}
             </span>
           </button>

@@ -16,7 +16,7 @@ export function Header({ onOpenBulkModal, qrCount }: HeaderProps) {
   const { activeTab, setActiveTab } = useStudioStore();
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-gray-200">
+    <header className="sticky top-0 z-40 w-full bg-surface/90 backdrop-blur-md border-b border-line">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
         <button
@@ -24,32 +24,32 @@ export function Header({ onOpenBulkModal, qrCount }: HeaderProps) {
           onClick={() => setActiveTab("studio")}
           className="flex items-center gap-2.5 text-left group focus:outline-none"
         >
-          <div className="h-9 w-9 rounded-xl bg-gray-900 text-white flex items-center justify-center shadow-sm group-hover:bg-gray-800 transition-colors">
+          <div className="h-9 w-9 rounded-xl bg-emerald-500 text-zinc-950 flex items-center justify-center shadow-sm group-hover:bg-emerald-400 transition-colors">
             <QrCode className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-semibold text-base text-gray-900 tracking-tight">SmartQR</span>
-              <span className="hidden sm:inline-block text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">
+              <span className="font-semibold text-base text-ink tracking-tight">SmartQR</span>
+              <span className="hidden sm:inline-block text-[10px] font-medium text-ink-muted bg-elevated px-1.5 py-0.5 rounded-md">
                 Studio
               </span>
             </div>
-            <p className="text-[11px] text-gray-500 leading-none hidden sm:block">
+            <p className="text-[11px] text-ink-muted leading-none hidden sm:block">
               Dynamic QR Workspace
             </p>
           </div>
         </button>
 
         {/* Center Navigation Switcher */}
-        <nav className="flex items-center bg-gray-100/90 p-1 rounded-xl border border-gray-200/70">
+        <nav className="flex items-center bg-canvas p-1 rounded-xl border border-line">
           <button
             type="button"
             onClick={() => setActiveTab("studio")}
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all",
               activeTab === "studio"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-elevated text-ink shadow-sm"
+                : "text-ink-secondary hover:text-ink"
             )}
           >
             <PlusCircle className="h-3.5 w-3.5" />
@@ -61,8 +61,8 @@ export function Header({ onOpenBulkModal, qrCount }: HeaderProps) {
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all",
               activeTab === "manager"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-elevated text-ink shadow-sm"
+                : "text-ink-secondary hover:text-ink"
             )}
           >
             <LayoutGrid className="h-3.5 w-3.5" />
@@ -72,8 +72,8 @@ export function Header({ onOpenBulkModal, qrCount }: HeaderProps) {
                 className={cn(
                   "ml-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-mono",
                   activeTab === "manager"
-                    ? "bg-gray-100 text-gray-800"
-                    : "bg-gray-200/80 text-gray-600"
+                    ? "bg-canvas text-ink"
+                    : "bg-surface text-ink-muted"
                 )}
               >
                 {qrCount}
@@ -88,7 +88,7 @@ export function Header({ onOpenBulkModal, qrCount }: HeaderProps) {
             variant="outline"
             size="sm"
             onClick={onOpenBulkModal}
-            leftIcon={<FileSpreadsheet className="h-3.5 w-3.5 text-gray-500" />}
+            leftIcon={<FileSpreadsheet className="h-3.5 w-3.5 text-ink-muted" />}
             className="hidden sm:inline-flex"
           >
             Bulk CSV

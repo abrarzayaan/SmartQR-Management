@@ -29,8 +29,8 @@ export function CtaFrameCustom() {
               className={cn(
                 "py-2.5 px-3 rounded-xl border text-xs font-medium transition-all",
                 frame_style === f.id
-                  ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                  : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
               )}
             >
               {f.label}
@@ -58,7 +58,7 @@ export function CtaFrameCustom() {
                 type="color"
                 value={frame_color}
                 onChange={(e) => setField("frame_color", e.target.value)}
-                className="h-10 w-10 rounded-xl border border-gray-200 bg-white cursor-pointer p-1 shrink-0"
+                className="h-10 w-10 rounded-xl border border-line bg-surface cursor-pointer p-1 shrink-0"
               />
               <Input
                 value={frame_color}

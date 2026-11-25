@@ -78,7 +78,7 @@ export default function Home() {
             {/* Left Column: Clean 3-Step Guided Builder */}
             <div className="lg:col-span-7 space-y-5">
               {/* Stepper Bar */}
-              <div className="bg-white border border-gray-200/90 rounded-2xl p-1.5 shadow-card grid grid-cols-3 gap-1.5">
+              <div className="bg-surface border border-line rounded-2xl p-1.5 shadow-card grid grid-cols-3 gap-1.5">
                 {STUDIO_STEPS.map((s) => {
                   const isActive = step === s.id;
                   return (
@@ -89,16 +89,16 @@ export default function Home() {
                       className={cn(
                         "flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-medium transition-all",
                         isActive
-                          ? "bg-gray-900 text-white shadow-sm"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                          ? "bg-emerald-500 text-zinc-950 font-semibold shadow-sm"
+                          : "text-ink-secondary hover:text-ink hover:bg-canvas"
                       )}
                     >
                       <span
                         className={cn(
                           "h-5 w-5 rounded-full text-[11px] font-semibold flex items-center justify-center shrink-0",
                           isActive
-                            ? "bg-white/20 text-white"
-                            : "bg-gray-100 text-gray-600"
+                            ? "bg-zinc-950/20 text-zinc-950"
+                            : "bg-elevated text-ink-secondary"
                         )}
                       >
                         {s.num}
@@ -115,17 +115,17 @@ export default function Home() {
                   {step === "content" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-base font-semibold text-gray-900">
+                        <h2 className="text-base font-semibold text-ink">
                           Enter QR Content
                         </h2>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-ink-muted mt-0.5">
                           Choose what happens when someone scans your QR code.
                         </p>
                       </div>
 
                       <ContentSection />
 
-                      <div className="pt-4 border-t border-gray-100 flex justify-end">
+                      <div className="pt-4 border-t border-line flex justify-end">
                         <Button
                           variant="primary"
                           onClick={() => setStep("design")}
@@ -140,10 +140,10 @@ export default function Home() {
                   {step === "design" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-base font-semibold text-gray-900">
+                        <h2 className="text-base font-semibold text-ink">
                           Customize Appearance
                         </h2>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-ink-muted mt-0.5">
                           Pick a quick preset or fine-tune shapes, colors, logo, and frame.
                         </p>
                       </div>
@@ -151,7 +151,7 @@ export default function Home() {
                       <BrandKitBar onOpenSaveKitModal={() => setIsSaveKitOpen(true)} />
 
                       {/* Clean Design Sub-Tabs */}
-                      <div className="flex items-center gap-1.5 border-b border-gray-200 pb-3 overflow-x-auto">
+                      <div className="flex items-center gap-1.5 border-b border-line pb-3 overflow-x-auto">
                         {DESIGN_TABS.map((t) => {
                           const Icon = t.icon;
                           const isActive = designTab === t.id;
@@ -162,7 +162,7 @@ export default function Home() {
                               size="sm"
                               onClick={() => setDesignTab(t.id)}
                               leftIcon={<Icon className="h-3.5 w-3.5" />}
-                              className={cn(isActive && "text-gray-900 font-semibold")}
+                              className={cn(isActive && "text-ink font-semibold")}
                             >
                               {t.label}
                             </Button>
@@ -175,7 +175,7 @@ export default function Home() {
                         {designTab === "pattern" && (
                           <div className="space-y-6">
                             <PatternSelector />
-                            <div className="border-t border-gray-100 pt-5">
+                            <div className="border-t border-line pt-5">
                               <EyeSelector />
                             </div>
                           </div>
@@ -185,7 +185,7 @@ export default function Home() {
                         {designTab === "frame" && <CtaFrameCustom />}
                       </div>
 
-                      <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                      <div className="pt-4 border-t border-line flex items-center justify-between">
                         <Button
                           variant="outline"
                           onClick={() => setStep("content")}
@@ -207,10 +207,10 @@ export default function Home() {
                   {step === "settings" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-base font-semibold text-gray-900">
+                        <h2 className="text-base font-semibold text-ink">
                           Folder & Access Settings
                         </h2>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-ink-muted mt-0.5">
                           Organize into a campaign folder or add optional PIN, scan limit, or expiry.
                         </p>
                       </div>
@@ -219,7 +219,7 @@ export default function Home() {
                         onOpenNewFolderModal={() => setIsNewFolderOpen(true)}
                       />
 
-                      <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                      <div className="pt-4 border-t border-line flex items-center justify-between">
                         <Button
                           variant="outline"
                           onClick={() => setStep("design")}
@@ -227,8 +227,8 @@ export default function Home() {
                         >
                           Back to Design
                         </Button>
-                        <span className="text-xs text-gray-500">
-                          Ready? Click <strong className="text-gray-900">Save QR Code</strong> on the right.
+                        <span className="text-xs text-ink-muted">
+                          Ready? Click <strong className="text-ink">Save QR Code</strong> on the right.
                         </span>
                       </div>
                     </div>

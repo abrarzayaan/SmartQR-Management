@@ -29,8 +29,8 @@ export function ColorEngine() {
               className={cn(
                 "py-2 px-3 rounded-xl border text-xs font-medium transition-all",
                 gradient_type === g.id
-                  ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                  : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
               )}
             >
               {g.label}
@@ -47,7 +47,7 @@ export function ColorEngine() {
               type="color"
               value={fg_color}
               onChange={(e) => setField("fg_color", e.target.value)}
-              className="h-10 w-10 rounded-xl border border-gray-200 bg-white cursor-pointer p-1 shrink-0"
+              className="h-10 w-10 rounded-xl border border-line bg-surface cursor-pointer p-1 shrink-0"
             />
             <Input
               value={fg_color}
@@ -65,7 +65,7 @@ export function ColorEngine() {
                 type="color"
                 value={fg_color_2}
                 onChange={(e) => setField("fg_color_2", e.target.value)}
-                className="h-10 w-10 rounded-xl border border-gray-200 bg-white cursor-pointer p-1 shrink-0"
+                className="h-10 w-10 rounded-xl border border-line bg-surface cursor-pointer p-1 shrink-0"
               />
               <Input
                 value={fg_color_2}
@@ -79,12 +79,12 @@ export function ColorEngine() {
         <div className={gradient_type === "solid" ? "" : "sm:col-span-2"}>
           <div className="flex items-center justify-between mb-1.5">
             <Label className="mb-0">Background</Label>
-            <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+            <label className="flex items-center gap-1.5 text-xs text-ink-secondary cursor-pointer">
               <input
                 type="checkbox"
                 checked={isTransparent}
                 onChange={(e) => setField("bg_color", e.target.checked ? "transparent" : "#ffffff")}
-                className="h-3.5 w-3.5 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                className="h-3.5 w-3.5 rounded border-line-strong text-ink focus:ring-emerald-400"
               />
               <span>Transparent</span>
             </label>
@@ -96,7 +96,7 @@ export function ColorEngine() {
                 type="color"
                 value={bg_color}
                 onChange={(e) => setField("bg_color", e.target.value)}
-                className="h-10 w-10 rounded-xl border border-gray-200 bg-white cursor-pointer p-1 shrink-0"
+                className="h-10 w-10 rounded-xl border border-line bg-surface cursor-pointer p-1 shrink-0"
               />
               <Input
                 value={bg_color}

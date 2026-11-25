@@ -73,9 +73,9 @@ export function LivePreviewCard() {
         <CardContent className="p-5 space-y-4">
           {/* Top Bar */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gray-900">Live Preview</span>
+            <span className="text-xs font-semibold text-ink">Live Preview</span>
             {loading ? (
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-gray-500">
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-muted">
                 <RefreshCw className="h-3 w-3 animate-spin" />
                 Updating...
               </span>
@@ -87,7 +87,7 @@ export function LivePreviewCard() {
           </div>
 
           {/* QR Canvas */}
-          <div className="relative aspect-square w-full max-w-[280px] mx-auto rounded-2xl bg-preview-grid border border-gray-200/80 p-5 flex items-center justify-center overflow-hidden">
+          <div className="relative aspect-square w-full max-w-[280px] mx-auto rounded-2xl bg-preview-grid border border-line p-5 flex items-center justify-center overflow-hidden">
             {store.previewBlobUrl ? (
               <img
                 src={store.previewBlobUrl}
@@ -97,7 +97,7 @@ export function LivePreviewCard() {
                 }`}
               />
             ) : (
-              <div className="flex flex-col items-center justify-center text-gray-400">
+              <div className="flex flex-col items-center justify-center text-ink-muted">
                 <QrCode className="h-12 w-12 stroke-[1.2] mb-2 animate-pulse" />
                 <span className="text-xs">Generating preview...</span>
               </div>
@@ -105,8 +105,8 @@ export function LivePreviewCard() {
           </div>
 
           {/* Target Preview Pill */}
-          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200/70 text-xs">
-            <span className="text-gray-600 font-mono text-[11px] truncate flex-1">
+          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-canvas border border-line text-xs">
+            <span className="text-ink-secondary font-mono text-[11px] truncate flex-1">
               {store.target_url}
             </span>
             {store.target_url.startsWith("http") && (
@@ -114,7 +114,7 @@ export function LivePreviewCard() {
                 href={store.target_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-gray-900 transition-colors shrink-0"
+                className="text-ink-muted hover:text-ink transition-colors shrink-0"
                 title="Open URL"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
@@ -123,7 +123,7 @@ export function LivePreviewCard() {
           </div>
 
           {/* Primary Save & Export Actions */}
-          <div className="pt-2 border-t border-gray-100">
+          <div className="pt-2 border-t border-line">
             <ExportBar previewBlob={blob} />
           </div>
         </CardContent>

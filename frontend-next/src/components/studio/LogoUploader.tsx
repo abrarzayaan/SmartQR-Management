@@ -66,8 +66,8 @@ export function LogoUploader() {
                 className={cn(
                   "flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl border text-xs font-medium transition-all",
                   isSelected
-                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                    : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -81,16 +81,16 @@ export function LogoUploader() {
       <div>
         <Label>Or Upload Your Brand Logo</Label>
         {logo_data ? (
-          <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between p-3 rounded-xl border border-line bg-canvas">
             <div className="flex items-center gap-3">
               <img
                 src={logo_data}
                 alt="Logo Preview"
-                className="h-10 w-10 object-contain rounded-lg bg-white border border-gray-200 p-1"
+                className="h-10 w-10 object-contain rounded-lg bg-canvas border border-line p-1"
               />
               <div>
-                <div className="text-xs font-semibold text-gray-900">Custom Logo Active</div>
-                <div className="text-[11px] text-gray-500">Auto High error correction enabled</div>
+                <div className="text-xs font-semibold text-ink">Custom Logo Active</div>
+                <div className="text-[11px] text-ink-muted">Auto High error correction enabled</div>
               </div>
             </div>
             <Button variant="ghost" size="icon" onClick={removeLogo} title="Remove logo">
@@ -109,9 +109,9 @@ export function LogoUploader() {
             />
             <label
               htmlFor="custom-logo-file"
-              className="flex items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-gray-300 hover:border-gray-400 bg-gray-50/70 hover:bg-gray-50 text-gray-600 hover:text-gray-900 cursor-pointer transition-all text-xs font-medium"
+              className="flex items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-line-strong hover:border-gray-400 bg-canvas hover:bg-elevated text-ink-secondary hover:text-ink cursor-pointer transition-all text-xs font-medium"
             >
-              <Upload className="h-4 w-4 text-gray-500" />
+              <Upload className="h-4 w-4 text-ink-muted" />
               <span>Click to upload PNG, SVG, or JPG logo</span>
             </label>
           </div>

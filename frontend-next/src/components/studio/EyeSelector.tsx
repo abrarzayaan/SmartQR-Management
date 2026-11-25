@@ -43,8 +43,8 @@ export function EyeSelector() {
                 className={cn(
                   "py-2 px-2 rounded-lg border text-xs font-medium transition-all",
                   eye_frame === f.id
-                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                    : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
                 )}
               >
                 {f.label}
@@ -64,8 +64,8 @@ export function EyeSelector() {
                 className={cn(
                   "py-2 px-2 rounded-lg border text-xs font-medium transition-all",
                   eye_ball === b.id
-                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                    : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
                 )}
               >
                 {b.label}
@@ -75,8 +75,8 @@ export function EyeSelector() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100">
-        <label className="flex items-center gap-2 cursor-pointer text-xs text-gray-700 font-medium">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-line">
+        <label className="flex items-center gap-2 cursor-pointer text-xs text-ink-secondary font-medium">
           <input
             type="checkbox"
             checked={has_custom_eye_color}
@@ -87,7 +87,7 @@ export function EyeSelector() {
                 setField("eye_color", "#2563eb");
               }
             }}
-            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+            className="h-4 w-4 rounded border-line-strong text-ink focus:ring-emerald-400"
           />
           <span>Use custom corner eye color</span>
         </label>
@@ -98,7 +98,7 @@ export function EyeSelector() {
               type="color"
               value={eye_color || "#2563eb"}
               onChange={(e) => setField("eye_color", e.target.value)}
-              className="h-8 w-8 rounded-lg border border-gray-200 bg-white cursor-pointer p-0.5"
+              className="h-8 w-8 rounded-lg border border-line bg-surface cursor-pointer p-0.5"
             />
             <Input
               value={eye_color || "#2563eb"}

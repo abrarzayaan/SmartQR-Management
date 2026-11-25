@@ -48,27 +48,27 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         className={cn(
-          "bg-white border border-gray-200 rounded-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-modal",
+          "bg-surface border border-line rounded-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-modal",
           widthMap[maxWidth]
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-4 px-6 py-4 border-b border-gray-100 shrink-0">
+        <div className="flex items-start justify-between gap-4 px-6 py-4 border-b border-line shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             {icon && (
-              <div className="h-9 w-9 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0">
+              <div className="h-9 w-9 rounded-xl bg-elevated border border-line text-emerald-400 flex items-center justify-center shrink-0">
                 {icon}
               </div>
             )}
             <div className="min-w-0">
-              <h3 className="text-base font-semibold text-gray-900 truncate">{title}</h3>
+              <h3 className="text-base font-semibold text-ink truncate">{title}</h3>
               {description && (
-                <p className="text-xs text-gray-500 mt-0.5 truncate">{description}</p>
+                <p className="text-xs text-ink-muted mt-0.5 truncate">{description}</p>
               )}
             </div>
           </div>
@@ -86,7 +86,7 @@ export function Modal({
         <div className="p-6 overflow-y-auto flex-1">{children}</div>
 
         {footer && (
-          <div className="flex items-center justify-end gap-2 px-6 py-3.5 border-t border-gray-100 bg-gray-50/70 shrink-0">
+          <div className="flex items-center justify-end gap-2 px-6 py-3.5 border-t border-line bg-canvas/60 shrink-0">
             {footer}
           </div>
         )}

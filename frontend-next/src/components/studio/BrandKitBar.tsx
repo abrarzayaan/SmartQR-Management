@@ -100,7 +100,7 @@ export function BrandKitBar({ onOpenSaveKitModal }: BrandKitBarProps) {
           variant="outline"
           size="xs"
           onClick={onOpenSaveKitModal}
-          leftIcon={<BookmarkPlus className="h-3.5 w-3.5 text-gray-500" />}
+          leftIcon={<BookmarkPlus className="h-3.5 w-3.5 text-ink-muted" />}
         >
           Save as Kit
         </Button>
@@ -117,8 +117,8 @@ export function BrandKitBar({ onOpenSaveKitModal }: BrandKitBarProps) {
               className={cn(
                 "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all",
                 isActive
-                  ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                  : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                  : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
               )}
             >
               <span
@@ -140,7 +140,7 @@ export function BrandKitBar({ onOpenSaveKitModal }: BrandKitBarProps) {
             key={kit.id}
             type="button"
             onClick={() => applyBrandKit(kit)}
-            className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50/70 text-blue-800 hover:bg-blue-100/70 text-xs font-medium transition-all"
+            className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-medium transition-all"
           >
             <span
               className="h-3 w-3 rounded-full shrink-0 ring-1 ring-black/10"

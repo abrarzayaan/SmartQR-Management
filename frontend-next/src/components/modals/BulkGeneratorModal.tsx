@@ -111,11 +111,11 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
         </>
       }
     >
-      <div className="space-y-5 text-xs text-gray-600">
-        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+      <div className="space-y-5 text-xs text-ink-secondary">
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-canvas border border-line">
           <div>
-            <div className="font-semibold text-gray-900">Need the CSV format?</div>
-            <div className="text-[11px] text-gray-500 mt-0.5">
+            <div className="font-semibold text-ink">Need the CSV format?</div>
+            <div className="text-[11px] text-ink-muted mt-0.5">
               Download our ready-to-use CSV template with example rows.
             </div>
           </div>
@@ -142,23 +142,23 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
             htmlFor="bulk-csv-input"
             className={`flex flex-col items-center justify-center p-7 rounded-2xl border-2 border-dashed cursor-pointer transition-all ${
               file
-                ? "border-emerald-300 bg-emerald-50/40"
-                : "border-gray-200 hover:border-gray-300 bg-gray-50/50 hover:bg-gray-50"
+                ? "border-emerald-500/40 bg-emerald-500/10"
+                : "border-line hover:border-line-strong bg-canvas hover:bg-elevated"
             }`}
           >
             {file ? (
               <div className="text-center">
-                <CheckCircle2 className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
-                <div className="font-semibold text-gray-900">{file.name}</div>
-                <div className="text-[11px] text-gray-500 mt-0.5">
+                <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
+                <div className="font-semibold text-ink">{file.name}</div>
+                <div className="text-[11px] text-ink-muted mt-0.5">
                   {(file.size / 1024).toFixed(1)} KB • Click to replace file
                 </div>
               </div>
             ) : (
               <div className="text-center">
-                <Upload className="h-7 w-7 text-gray-400 mx-auto mb-2" />
-                <div className="font-semibold text-gray-900">Click to select CSV file</div>
-                <div className="text-[11px] text-gray-500 mt-1">
+                <Upload className="h-7 w-7 text-ink-muted mx-auto mb-2" />
+                <div className="font-semibold text-ink">Click to select CSV file</div>
+                <div className="text-[11px] text-ink-muted mt-1">
                   Columns: title, target_url, qr_type, fg_color, bg_color
                 </div>
               </div>
@@ -168,13 +168,13 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
 
         {csvPreview.length > 0 && (
           <div className="space-y-1.5">
-            <span className="text-[11px] font-medium text-gray-500">
+            <span className="text-[11px] font-medium text-ink-muted">
               Preview ({Math.max(0, csvPreview.length - 1)} sample rows):
             </span>
-            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white font-mono text-[11px]">
+            <div className="overflow-x-auto rounded-xl border border-line bg-surface font-mono text-[11px]">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-gray-600">
+                  <tr className="border-b border-line bg-canvas text-ink-secondary">
                     {csvPreview[0]?.map((col, idx) => (
                       <th key={idx} className="py-2 px-3 font-semibold">
                         {col}
@@ -182,9 +182,9 @@ export function BulkGeneratorModal({ isOpen, onClose }: BulkGeneratorModalProps)
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-line">
                   {csvPreview.slice(1).map((row, rIdx) => (
-                    <tr key={rIdx} className="text-gray-700">
+                    <tr key={rIdx} className="text-ink-secondary">
                       {row.map((val, cIdx) => (
                         <td key={cIdx} className="py-1.5 px-3 truncate max-w-[160px]">
                           {val}

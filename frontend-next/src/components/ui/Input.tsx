@@ -8,7 +8,7 @@ export function Label({
 }: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
-      className={cn("block text-xs font-medium text-gray-700 mb-1.5", className)}
+      className={cn("block text-xs font-medium text-ink-secondary mb-1.5", className)}
       {...props}
     >
       {children}
@@ -23,10 +23,10 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      "w-full h-10 rounded-xl border border-gray-200 bg-white px-3.5 text-sm text-gray-900",
-      "placeholder:text-gray-400 transition-all duration-150",
-      "hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10",
-      "disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed",
+      "w-full h-10 rounded-xl border border-line bg-canvas px-3.5 text-sm text-ink",
+      "placeholder:text-ink-subtle transition-all duration-150",
+      "hover:border-line-strong focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
+      "disabled:opacity-50 disabled:cursor-not-allowed",
       className
     )}
     {...props}
@@ -41,10 +41,10 @@ export const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      "w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900",
-      "placeholder:text-gray-400 transition-all duration-150 resize-none",
-      "hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10",
-      "disabled:bg-gray-50 disabled:text-gray-400",
+      "w-full rounded-xl border border-line bg-canvas px-3.5 py-2.5 text-sm text-ink",
+      "placeholder:text-ink-subtle transition-all duration-150 resize-none",
+      "hover:border-line-strong focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
+      "disabled:opacity-50",
       className
     )}
     {...props}
@@ -59,9 +59,9 @@ export const Select = React.forwardRef<
   <select
     ref={ref}
     className={cn(
-      "w-full h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900",
+      "w-full h-10 rounded-xl border border-line bg-canvas px-3 text-sm text-ink",
       "transition-all duration-150",
-      "hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10",
+      "hover:border-line-strong focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
       className
     )}
     {...props}

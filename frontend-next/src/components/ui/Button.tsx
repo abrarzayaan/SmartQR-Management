@@ -14,17 +14,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
-    "bg-gray-900 text-white hover:bg-gray-800 border border-gray-900 shadow-sm focus-visible:ring-gray-900/20",
+    "bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 border border-emerald-400/40 shadow-sm focus-visible:ring-emerald-500/30",
   accent:
-    "bg-blue-600 text-white hover:bg-blue-700 border border-blue-600 shadow-sm focus-visible:ring-blue-600/20",
+    "bg-zinc-100 text-zinc-950 font-semibold hover:bg-white border border-zinc-200 shadow-sm focus-visible:ring-zinc-400/30",
   secondary:
-    "bg-gray-100 text-gray-800 hover:bg-gray-200/80 border border-transparent focus-visible:ring-gray-400/20",
+    "bg-elevated text-ink hover:bg-[#282C35] border border-line focus-visible:ring-zinc-500/25",
   outline:
-    "bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300 shadow-[0_1px_2px_rgba(16,24,40,0.04)] focus-visible:ring-gray-400/20",
+    "bg-surface text-ink-secondary hover:bg-elevated hover:text-ink border border-line hover:border-line-strong focus-visible:ring-zinc-500/25",
   ghost:
-    "bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-transparent focus-visible:ring-gray-400/20",
+    "bg-transparent text-ink-secondary hover:bg-elevated hover:text-ink border border-transparent focus-visible:ring-zinc-500/20",
   danger:
-    "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200/70 focus-visible:ring-red-500/20",
+    "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/25 focus-visible:ring-red-500/25",
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -59,7 +59,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "inline-flex items-center justify-center font-medium transition-all duration-150 select-none",
           "focus:outline-none focus-visible:ring-4 active:scale-[0.98]",
-          "disabled:opacity-50 disabled:pointer-events-none",
+          "disabled:opacity-45 disabled:pointer-events-none",
           variantClasses[variant],
           sizeClasses[size],
           className

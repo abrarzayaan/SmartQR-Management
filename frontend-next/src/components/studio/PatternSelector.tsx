@@ -34,8 +34,8 @@ export function PatternSelector() {
               className={cn(
                 "flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border text-xs font-medium transition-all",
                 isSelected
-                  ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                  : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
               )}
             >
               <Icon className="h-4 w-4" />

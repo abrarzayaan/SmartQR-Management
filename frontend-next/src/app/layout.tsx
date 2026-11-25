@@ -15,21 +15,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased bg-canvas text-ink selection:bg-blue-100 selection:text-blue-900">
+    <html lang="en" className="dark">
+      <body className="font-sans antialiased bg-canvas text-ink selection:bg-emerald-500/25 selection:text-emerald-200">
         <Providers>
           {children}
           <Toaster
             position="bottom-right"
-            theme="light"
+            theme="dark"
             closeButton
             richColors
             toastOptions={{
               style: {
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-                color: "#111827",
-                boxShadow: "0 10px 25px -5px rgba(16, 24, 40, 0.1)",
+                background: "#181A1F",
+                border: "1px solid #272B34",
+                color: "#F3F4F6",
               },
             }}
           />

@@ -160,7 +160,7 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
           variant="outline"
           size="sm"
           onClick={() => handleDownloadPng(1200)}
-          leftIcon={<Download className="h-3.5 w-3.5 text-gray-500" />}
+          leftIcon={<Download className="h-3.5 w-3.5 text-ink-muted" />}
         >
           PNG
         </Button>
@@ -169,7 +169,7 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
           variant="outline"
           size="sm"
           onClick={handleDownloadSvg}
-          leftIcon={<FileDown className="h-3.5 w-3.5 text-gray-500" />}
+          leftIcon={<FileDown className="h-3.5 w-3.5 text-ink-muted" />}
         >
           SVG
         </Button>
@@ -178,7 +178,7 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
           variant="outline"
           size="sm"
           onClick={handleDownloadPdf}
-          leftIcon={<Printer className="h-3.5 w-3.5 text-gray-500" />}
+          leftIcon={<Printer className="h-3.5 w-3.5 text-ink-muted" />}
         >
           Print PDF
         </Button>
@@ -201,7 +201,7 @@ export function ExportBar({ previewBlob }: ExportBarProps) {
           onClick={handleCopyLink}
           leftIcon={
             copiedLink ? (
-              <Check className="h-3 w-3 text-emerald-600" />
+              <Check className="h-3 w-3 text-emerald-400" />
             ) : (
               <Copy className="h-3 w-3" />
             )

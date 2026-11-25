@@ -74,15 +74,15 @@ export function SmartRulesModal({ qrId, qrTitle, onClose }: SmartRulesModalProps
         </Button>
       }
     >
-      <div className="space-y-6 text-xs text-gray-600">
+      <div className="space-y-6 text-xs text-ink-secondary">
         {/* Active Rules */}
         <div className="space-y-2.5">
-          <div className="font-semibold text-gray-900">Active Rules ({rules.length})</div>
+          <div className="font-semibold text-ink">Active Rules ({rules.length})</div>
 
           {isLoading ? (
-            <div className="py-6 text-center text-gray-400">Loading rules...</div>
+            <div className="py-6 text-center text-ink-muted">Loading rules...</div>
           ) : rules.length === 0 ? (
-            <div className="p-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/70 text-center text-gray-500">
+            <div className="p-4 rounded-xl border border-dashed border-line bg-canvas text-center text-ink-muted">
               No routing rules yet. All visitors go to the default target URL.
             </div>
           ) : (
@@ -90,24 +90,24 @@ export function SmartRulesModal({ qrId, qrTitle, onClose }: SmartRulesModalProps
               {rules.map((r) => (
                 <div
                   key={r.id}
-                  className="flex items-center justify-between p-3 rounded-xl border border-gray-200 bg-white gap-3"
+                  className="flex items-center justify-between p-3 rounded-xl border border-line bg-surface gap-3"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <Badge variant="info" className="font-mono">
                       P{r.priority}
                     </Badge>
                     <div className="min-w-0">
-                      <div className="text-gray-900 font-medium flex items-center gap-1.5">
+                      <div className="text-ink font-medium flex items-center gap-1.5">
                         {r.rule_type === "os" ? (
-                          <Smartphone className="h-3.5 w-3.5 text-gray-500" />
+                          <Smartphone className="h-3.5 w-3.5 text-ink-muted" />
                         ) : r.rule_type === "time" ? (
-                          <Clock className="h-3.5 w-3.5 text-gray-500" />
+                          <Clock className="h-3.5 w-3.5 text-ink-muted" />
                         ) : (
-                          <Calendar className="h-3.5 w-3.5 text-gray-500" />
+                          <Calendar className="h-3.5 w-3.5 text-ink-muted" />
                         )}
                         <span className="capitalize">{r.rule_type}:</span> {r.condition_value}
                       </div>
-                      <div className="text-[11px] text-gray-500 font-mono truncate max-w-md">
+                      <div className="text-[11px] text-ink-muted font-mono truncate max-w-md">
                         → {r.redirect_url}
                       </div>
                     </div>
@@ -117,7 +117,7 @@ export function SmartRulesModal({ qrId, qrTitle, onClose }: SmartRulesModalProps
                     variant="ghost"
                     size="icon"
                     onClick={() => deleteMutation.mutate(r.id)}
-                    className="hover:text-red-600 hover:bg-red-50 shrink-0"
+                    className="hover:text-red-400 hover:bg-red-500/15 shrink-0"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -128,8 +128,8 @@ export function SmartRulesModal({ qrId, qrTitle, onClose }: SmartRulesModalProps
         </div>
 
         {/* Add Rule Form */}
-        <div className="p-4 rounded-2xl border border-gray-200 bg-gray-50/70 space-y-4">
-          <div className="font-semibold text-gray-900">Add New Rule</div>
+        <div className="p-4 rounded-2xl border border-line bg-canvas space-y-4">
+          <div className="font-semibold text-ink">Add New Rule</div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>

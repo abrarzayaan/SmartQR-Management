@@ -78,9 +78,9 @@ export function SaveBrandKitModal({ isOpen, onClose }: SaveBrandKitModalProps) {
           />
         </div>
 
-        <div className="p-3 rounded-xl bg-gray-50 border border-gray-200 flex items-center gap-3">
+        <div className="p-3 rounded-xl bg-canvas border border-line flex items-center gap-3">
           <div
-            className="h-9 w-9 rounded-xl border border-gray-200 shrink-0"
+            className="h-9 w-9 rounded-xl border border-line shrink-0"
             style={{
               background:
                 store.gradient_type === "solid"
@@ -89,10 +89,10 @@ export function SaveBrandKitModal({ isOpen, onClose }: SaveBrandKitModalProps) {
             }}
           />
           <div className="min-w-0">
-            <div className="text-xs font-semibold text-gray-900 capitalize">
+            <div className="text-xs font-semibold text-ink capitalize">
               {store.dot_style} dots • {store.eye_frame} eyes
             </div>
-            <div className="text-[11px] text-gray-500 font-mono">
+            <div className="text-[11px] text-ink-muted font-mono">
               {store.fg_color} on {store.bg_color}
             </div>
           </div>

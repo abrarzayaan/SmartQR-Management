@@ -35,7 +35,7 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
       <div>
         <div className="flex items-center justify-between mb-1.5">
           <Label className="mb-0 flex items-center gap-1.5">
-            <Folder className="h-3.5 w-3.5 text-gray-400" />
+            <Folder className="h-3.5 w-3.5 text-ink-muted" />
             <span>Campaign Folder</span>
           </Label>
           {onOpenNewFolderModal && (
@@ -66,7 +66,7 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
         <div>
           <Label className="flex items-center gap-1.5">
-            <Lock className="h-3.5 w-3.5 text-gray-400" />
+            <Lock className="h-3.5 w-3.5 text-ink-muted" />
             <span>PIN Passcode</span>
           </Label>
           <Input
@@ -76,12 +76,12 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
             maxLength={8}
             className="font-mono"
           />
-          <p className="text-[11px] text-gray-500 mt-1">Require PIN before redirect</p>
+          <p className="text-[11px] text-ink-muted mt-1">Require PIN before redirect</p>
         </div>
 
         <div>
           <Label className="flex items-center gap-1.5">
-            <Hash className="h-3.5 w-3.5 text-gray-400" />
+            <Hash className="h-3.5 w-3.5 text-ink-muted" />
             <span>Max Scans</span>
           </Label>
           <Input
@@ -92,12 +92,12 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
             min={1}
             className="font-mono"
           />
-          <p className="text-[11px] text-gray-500 mt-1">Stop after N total scans</p>
+          <p className="text-[11px] text-ink-muted mt-1">Stop after N total scans</p>
         </div>
 
         <div>
           <Label className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5 text-gray-400" />
+            <Clock className="h-3.5 w-3.5 text-ink-muted" />
             <span>Expiration</span>
           </Label>
           <Input
@@ -108,12 +108,12 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
             }
             className="text-xs"
           />
-          <p className="text-[11px] text-gray-500 mt-1">Auto-expire date & time</p>
+          <p className="text-[11px] text-ink-muted mt-1">Auto-expire date & time</p>
         </div>
       </div>
 
       {/* Error Correction */}
-      <div className="pt-2 border-t border-gray-100">
+      <div className="pt-2 border-t border-line">
         <Label>Error Correction Level</Label>
         <div className="grid grid-cols-4 gap-2">
           {(["L", "M", "Q", "H"] as const).map((lvl) => {
@@ -132,12 +132,12 @@ export function SecuritySection({ onOpenNewFolderModal }: SecuritySectionProps) 
                 className={cn(
                   "py-2 px-2 rounded-xl border text-center transition-all",
                   isSelected
-                    ? "bg-gray-900 text-white border-gray-900 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    ? "bg-emerald-500 text-zinc-950 font-semibold border-emerald-400 shadow-sm"
+                    : "bg-canvas text-ink-secondary border-line hover:border-line-strong hover:bg-elevated hover:text-ink"
                 )}
               >
                 <div className="text-xs font-semibold">{lvl}</div>
-                <div className={cn("text-[10px]", isSelected ? "text-gray-300" : "text-gray-400")}>
+                <div className={cn("text-[10px]", isSelected ? "text-gray-300" : "text-ink-muted")}>
                   {labels[lvl]}
                 </div>
               </button>

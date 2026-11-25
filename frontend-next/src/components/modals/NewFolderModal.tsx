@@ -85,7 +85,7 @@ export function NewFolderModal({ isOpen, onClose }: NewFolderModalProps) {
                 type="button"
                 onClick={() => setColor(c)}
                 className={`h-7 w-7 rounded-full transition-transform ${
-                  color === c ? "ring-2 ring-gray-900 ring-offset-2 scale-110" : "hover:scale-105"
+                  color === c ? "ring-2 ring-emerald-400 ring-offset-2 scale-110" : "hover:scale-105"
                 }`}
                 style={{ backgroundColor: c }}
               />

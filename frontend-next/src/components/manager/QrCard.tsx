@@ -63,11 +63,11 @@ export function QrCard({
   const isExpired = qr.expires_at && new Date(qr.expires_at) < new Date();
 
   return (
-    <div className="bg-white border border-gray-200/90 hover:border-gray-300 rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+    <div className="bg-surface border border-line hover:border-line-strong rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
       <div className="space-y-3">
         {/* Top Row: Thumbnail + Info */}
         <div className="flex items-start gap-3.5">
-          <div className="h-16 w-16 rounded-xl bg-gray-50 border border-gray-200/80 p-1.5 flex items-center justify-center shrink-0">
+          <div className="h-16 w-16 rounded-xl bg-canvas border border-line p-1.5 flex items-center justify-center shrink-0">
             <img
               src={`/api/qr/${qr.id}/image`}
               alt={qr.title}
@@ -86,10 +86,10 @@ export function QrCard({
               </Badge>
             </div>
 
-            <h4 className="font-semibold text-gray-900 text-sm truncate" title={qr.title}>
+            <h4 className="font-semibold text-ink text-sm truncate" title={qr.title}>
               {qr.title}
             </h4>
-            <p className="text-[11px] text-gray-500 font-mono truncate mt-0.5" title={qr.target_url}>
+            <p className="text-[11px] text-ink-muted font-mono truncate mt-0.5" title={qr.target_url}>
               {qr.target_url}
             </p>
           </div>
@@ -100,19 +100,19 @@ export function QrCard({
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200/80 text-gray-700 text-[11px] font-mono transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-canvas hover:bg-elevated border border-line text-ink-secondary text-[11px] font-mono transition-colors"
             title="Copy short redirect link"
           >
             {copied ? (
-              <Check className="h-3 w-3 text-emerald-600" />
+              <Check className="h-3 w-3 text-emerald-400" />
             ) : (
-              <Copy className="h-3 w-3 text-gray-400" />
+              <Copy className="h-3 w-3 text-ink-muted" />
             )}
             <span>/r/{qr.short_code}</span>
           </button>
 
           <Badge variant="default" className="font-mono">
-            <BarChart2 className="h-3 w-3 text-gray-500" />
+            <BarChart2 className="h-3 w-3 text-ink-muted" />
             {qr.scan_count} scans
           </Badge>
 
@@ -147,7 +147,7 @@ export function QrCard({
       </div>
 
       {/* Action Footer */}
-      <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-100">
+      <div className="flex items-center justify-between pt-3 mt-4 border-t border-line">
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
@@ -155,7 +155,7 @@ export function QrCard({
             onClick={() => onOpenAnalytics(qr)}
             title="View Analytics"
           >
-            <BarChart2 className="h-4 w-4 text-gray-600" />
+            <BarChart2 className="h-4 w-4 text-ink-secondary" />
           </Button>
           <Button
             variant="ghost"
@@ -163,7 +163,7 @@ export function QrCard({
             onClick={() => onOpenRules(qr)}
             title="Smart Routing Rules"
           >
-            <GitFork className="h-4 w-4 text-gray-600" />
+            <GitFork className="h-4 w-4 text-ink-secondary" />
           </Button>
           <Button
             variant="ghost"
@@ -171,7 +171,7 @@ export function QrCard({
             onClick={() => onOpenEdit(qr)}
             title="Edit Destination"
           >
-            <Edit className="h-4 w-4 text-gray-600" />
+            <Edit className="h-4 w-4 text-ink-secondary" />
           </Button>
           <Button
             variant="ghost"
@@ -179,7 +179,7 @@ export function QrCard({
             onClick={handleDownload}
             title="Download PNG"
           >
-            <Download className="h-4 w-4 text-gray-600" />
+            <Download className="h-4 w-4 text-ink-secondary" />
           </Button>
         </div>
 
@@ -192,7 +192,7 @@ export function QrCard({
             }
           }}
           title="Delete QR"
-          className="hover:text-red-600 hover:bg-red-50"
+          className="hover:text-red-400 hover:bg-red-500/15"
         >
           <Trash2 className="h-4 w-4" />
         </Button>
